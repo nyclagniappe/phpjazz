@@ -1,2 +1,12 @@
-*.idea
+/.idea
+*.iml
+.buildpath
+.settings
+.project
+.DS_Store
 
+/vendor
+composer.phar
+
+.env
+.phpunit.result.cache
