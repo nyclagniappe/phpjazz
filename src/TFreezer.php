@@ -10,25 +10,30 @@ trait TFreezer
 {
 
     private bool $frozen = false;
+    private array $frozenKeys = [];
 
 
     // MUTATOR METHODS
     /**
      * Freeze class (Read Only)
+     * @param string|null $key
      * @postcondition is frozen
      */
-    public function freeze(): void
+    public function freeze(string $key = null): void
     {
-        $this->frozen = true;
+        ($key !== null)
+            ? $this->frozenKeys[$key] = true
+            : $this->frozen = true;
     }
 
     /**
      * Verify if object is frozen
+     * @param string|null $key
      * @throws FrozenException
      */
-    protected function verifyFrozen(): void
+    protected function verifyFrozen(string $key = null): void
     {
-        if ($this->frozen()) {
+        if ($this->frozen($key)) {
             throw new FrozenException();
         }
     }
@@ -37,10 +42,13 @@ trait TFreezer
     // ACCESSOR METHODS
     /**
      * Returns if object is frozen
+     * @param string|null $key
      * @return bool
      */
-    public function frozen(): bool
+    public function frozen(string $key = null): bool
     {
-        return $this->frozen;
+        return ($key === null)
+            ? $this->frozen
+            : isset($this->frozenKeys[$key]);
     }
 }
