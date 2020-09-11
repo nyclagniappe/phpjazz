@@ -10,16 +10,18 @@ interface IFreezer
     // MUTATOR METHODS
     /**
      * Freeze class (Read Only)
+     * @param string|null $key
      * @postcondition is frozen
      */
-    public function freeze();
+    public function freeze(string $key = null): void;
 
 
 
     // ACCESSOR METHODS
     /**
      * Returns if object is frozen
+     * @param string|null $key
      * @return bool
      */
-    public function frozen(): bool;
+    public function frozen(string $key = null): bool;
 }

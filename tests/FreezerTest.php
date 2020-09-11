@@ -24,6 +24,10 @@ class FreezerTest extends AUnit
             {
                 $this->verifyFrozen();
             }
+            public function modifyField(): void
+            {
+                $this->verifyFrozen('id');
+            }
         };
     }
 
@@ -32,7 +36,7 @@ class FreezerTest extends AUnit
     /**
      * Test modification of frozen object
      */
-    public function test(): void
+    public function testModificationOfObject(): void
     {
         $obj = $this->myFreezer;
         self::assertFalse($obj->frozen());
@@ -48,5 +52,30 @@ class FreezerTest extends AUnit
 
         $this->expectException(FrozenException::class);
         $obj->modify();
+    }
+
+    /**
+     * Test modification of frozen property
+     */
+    public function testModificationOfProperty(): void
+    {
+        $key = 'id';
+        $fakeKey = 'fake';
+
+        $obj = $this->myFreezer;
+        self::assertFalse($obj->frozen());
+        self::assertFalse($obj->frozen($key));
+        self::assertFalse($obj->frozen($fakeKey));
+
+        $obj->freeze($key);
+        self::assertFalse($obj->frozen());
+        self::assertTrue($obj->frozen($key));
+        self::assertFalse($obj->frozen($fakeKey));
+
+        $obj->modify();
+        $obj->modify();
+
+        $this->expectException(FrozenException::class);
+        $obj->modifyField();
     }
 }
