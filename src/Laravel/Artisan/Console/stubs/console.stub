@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Console\Command;
+
+class DummyClass extends Command
+{
+
+    /**
+     * @var string
+     */
+    protected $signature = 'dummy:command';
+    /**
+     * @var string
+     */
+    protected $description = 'Command description';
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command
+     * @return mixed
+     */
+    public function handle()
+    {
+        //
+    }
+}
