@@ -8,14 +8,7 @@ use Illuminate\Console\Command;
 
 class DummyClass extends Command
 {
-
-    /**
-     * @var string
-     */
     protected $signature = 'dummy:command';
-    /**
-     * @var string
-     */
     protected $description = 'Command description';
 
 
@@ -29,10 +22,10 @@ class DummyClass extends Command
 
     /**
      * Execute the console command
-     * @return mixed
+     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
-        //
+        return 0;
     }
 }
