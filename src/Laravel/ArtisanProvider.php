@@ -12,6 +12,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeEvent,
     MakeException,
     MakeJob,
+    MakeListener,
 };
 
 class ArtisanProvider extends ArtisanServiceProvider
@@ -86,6 +87,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.job.make', static function ($app) {
             return new MakeJob($app['files']);
+        });
+    }
+
+    /**
+     * Register the LISTENER command
+     */
+    protected function registerListenerMakeCommand(): void
+    {
+        $this->app->singleton('command.listener.make', static function ($app) {
+            return new MakeListener($app['files']);
         });
     }
 }
