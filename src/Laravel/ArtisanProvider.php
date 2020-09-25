@@ -11,6 +11,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeConsole,
     MakeEvent,
     MakeException,
+    MakeJob,
 };
 
 class ArtisanProvider extends ArtisanServiceProvider
@@ -75,6 +76,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.exception.make', static function ($app) {
             return new MakeException($app['files']);
+        });
+    }
+
+    /**
+     * Register the JOB command
+     */
+    protected function registerJobMakeCommand(): void
+    {
+        $this->app->singleton('command.job.make', static function ($app) {
+            return new MakeJob($app['files']);
         });
     }
 }

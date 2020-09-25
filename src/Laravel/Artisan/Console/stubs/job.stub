@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Bus\Dispatchable;
+
+class DummyClass
+{
+    use Dispatchable;
+    use Queueable;
+
+    /**
+     * Create a new job instance
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Execute the job
+     */
+    public function handle(): void
+    {
+        //
+    }
+}
