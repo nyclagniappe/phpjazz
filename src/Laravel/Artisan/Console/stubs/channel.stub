@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use NamespacedDummyUserModel as DummyUser;
+
+class DummyClass
+{
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Authenticate the user's access to the channel
+     * @param DummyUser $user
+     * @return array|bool
+     */
+    public function join(DummyUser $user)
+    {
+        //
+    }
+}
