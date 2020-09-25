@@ -13,6 +13,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeException,
     MakeJob,
     MakeListener,
+    MakeMiddleware,
 };
 
 class ArtisanProvider extends ArtisanServiceProvider
@@ -97,6 +98,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.listener.make', static function ($app) {
             return new MakeListener($app['files']);
+        });
+    }
+
+    /**
+     * Register the MIDDLEWARE command
+     */
+    protected function registerMiddlewareMakeCommand(): void
+    {
+        $this->app->singleton('command.middleware.make', static function ($app) {
+            return new MakeMiddleware($app['files']);
         });
     }
 }
