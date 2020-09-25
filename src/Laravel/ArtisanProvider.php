@@ -10,6 +10,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeChannel,
     MakeConsole,
     MakeEvent,
+    MakeException,
 };
 
 class ArtisanProvider extends ArtisanServiceProvider
@@ -64,6 +65,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.event.make', static function ($app) {
             return new MakeEvent($app['files']);
+        });
+    }
+
+    /**
+     * Register the EXCEPTION command
+     */
+    protected function registerExceptionMakeCommand(): void
+    {
+        $this->app->singleton('command.exception.make', static function ($app) {
+            return new MakeException($app['files']);
         });
     }
 }

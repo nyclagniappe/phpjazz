@@ -19,6 +19,10 @@ class MakeConsole extends ConsoleMakeCommand
     use TModuleRootNamespace;
     use TModuleStubFile;
 
+    /**
+     * Returns stub file for generator
+     * @return string
+     */
     protected function getStub(): string
     {
         return $this->getStubFile('console.stub');

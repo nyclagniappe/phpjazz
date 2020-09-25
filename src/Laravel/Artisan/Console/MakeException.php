@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Jazz\Laravel\Artisan\Console;
 
-use Illuminate\Foundation\Console\ChannelMakeCommand;
+use Illuminate\Foundation\Console\ExceptionMakeCommand;
 use Jazz\Laravel\Artisan\{
     TModuleOptions,
     TModulePath,
@@ -12,7 +12,7 @@ use Jazz\Laravel\Artisan\{
     TModuleStubFile,
 };
 
-class MakeChannel extends ChannelMakeCommand
+class MakeException extends ExceptionMakeCommand
 {
     use TModuleOptions;
     use TModulePath;
@@ -25,6 +25,15 @@ class MakeChannel extends ChannelMakeCommand
      */
     protected function getStub(): string
     {
-        return $this->getStubFile('channel.stub');
+        $stubFile = 'exception';
+        if ($this->option('render')) {
+            $stubFile .= '-render';
+        }
+        if ($this->option('report')) {
+            $stubFile .= '-report';
+        }
+        $stubFile .= '.stub';
+
+        return $this->getStubFile($stubFile);
     }
 }

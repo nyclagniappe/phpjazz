@@ -19,6 +19,10 @@ class MakeEvent extends EventMakeCommand
     use TModuleRootNamespace;
     use TModuleStubFile;
 
+    /**
+     * Returns stub file for generator
+     * @return string
+     */
     protected function getStub(): string
     {
         return $this->getStubFile('event.stub');

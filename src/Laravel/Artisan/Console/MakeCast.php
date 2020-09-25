@@ -19,6 +19,10 @@ class MakeCast extends CastMakeCommand
     use TModuleRootNamespace;
     use TModuleStubFile;
 
+    /**
+     * Returns stub file for generator
+     * @return string
+     */
     protected function getStub(): string
     {
         return $this->getStubFile('cast.stub');
