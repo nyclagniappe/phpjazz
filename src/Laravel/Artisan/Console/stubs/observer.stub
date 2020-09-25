@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use NamespacedDummyModel as DummyModel;
+
+class DummyClass
+{
+    /**
+     * Handle the DocDummyModel "created" event
+     * @param DummyModel $dummyModel
+     */
+    public function created(DummyModel $dummyModel): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DocDummyModel "updated" event
+     * @param DummyModel $dummyModel
+     */
+    public function updated(DummyModel $dummyModel): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DocDummyModel "deleted" event
+     * @param DummyModel $dummyModel
+     */
+    public function deleted(DummyModel $dummyModel): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DocDummyModel "restored" event
+     * @param DummyModel $dummyModel
+     */
+    public function restored(DummyModel $dummyModel): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DocDummyModel "force deleted" event
+     * @param DummyModel $dummyModel
+     */
+    public function forceDeleted(DummyModel $dummyModel): void
+    {
+        //
+    }
+}

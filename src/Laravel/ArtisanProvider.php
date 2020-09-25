@@ -14,6 +14,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeJob,
     MakeListener,
     MakeMiddleware,
+    MakeObserver,
 };
 
 class ArtisanProvider extends ArtisanServiceProvider
@@ -108,6 +109,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.middleware.make', static function ($app) {
             return new MakeMiddleware($app['files']);
+        });
+    }
+
+    /**
+     * Register the OBSERVER command
+     */
+    protected function registerObserverMakeCommand(): void
+    {
+        $this->app->singleton('command.observer.make', static function ($app) {
+            return new MakeObserver($app['files']);
         });
     }
 }
