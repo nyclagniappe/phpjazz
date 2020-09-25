@@ -1,0 +1,89 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use NamespacedDummyUserModel as DummyUser;
+use NamespacedDummyModel as DummyModel;
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class DummyClass
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any DocDummyPluralModel
+     * @param DummyUser $user
+     * @return mixed
+     */
+    public function viewAny(DummyUser $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can view the DocDummyModel
+     * @param DummyUser $user
+     * @param DummyModel $dummyModel
+     * @return mixed
+     */
+    public function view(DummyUser $user, DummyModel $dummyModel)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can create DocDummyPluralModel
+     * @param DummyUser $user
+     * @return mixed
+     */
+    public function create(DummyUser $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can update the DocDummyModel
+     * @param DummyUser $user
+     * @param DummyModel $dummyModel
+     * @return mixed
+     */
+    public function update(DummyUser $user, DummyModel $dummyModel)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can delete the DocDummyModel
+     * @param DummyUser $user
+     * @param DummyModel $dummyModel
+     * @return mixed
+     */
+    public function delete(DummyUser $user, DummyModel $dummyModel)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can restore the DocDummyModel
+     * @param DummyUser $user
+     * @param DummyModel $dummyModel
+     * @return mixed
+     */
+    public function restore(DummyUser $user, DummyModel $dummyModel)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the DocDummyModel
+     * @param DummyUser $user
+     * @param DummyModel $dummyModel
+     * @return mixed
+     */
+    public function forceDelete(DummyUser $user, DummyModel $dummyModel)
+    {
+        //
+    }
+}
