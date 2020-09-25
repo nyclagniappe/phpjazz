@@ -6,6 +6,7 @@ namespace Jazz\Laravel;
 
 use Illuminate\Foundation\Providers\ArtisanServiceProvider;
 use Jazz\Laravel\Artisan\Console\{
+    MakeCast,
     MakeChannel,
     MakeConsole,
     MakeEvent,
@@ -26,6 +27,16 @@ class ArtisanProvider extends ArtisanServiceProvider
 
 
     // REGISTER METHODS
+    /**
+     * Register the CAST command
+     */
+    protected function registerCastMakeCommand(): void
+    {
+        $this->app->singleton('command.cast.make', function ($app) {
+            return new MakeCast($app['files']);
+        });
+    }
+
     /**
      * Register the CHANNEL command
      */
