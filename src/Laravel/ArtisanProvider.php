@@ -14,6 +14,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeJob,
     MakeListener,
     MakeMiddleware,
+    MakeNotification,
     MakeObserver,
     MakePolicy,
     MakeRequest,
@@ -113,6 +114,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.middleware.make', static function ($app) {
             return new MakeMiddleware($app['files']);
+        });
+    }
+
+    /**
+     * Register the NOTIFICATIONS command
+     */
+    protected function registerNotificationMakeCommand(): void
+    {
+        $this->app->singleton('command.notification.make', static function ($app) {
+            return new MakeNotification($app['files']);
         });
     }
 
