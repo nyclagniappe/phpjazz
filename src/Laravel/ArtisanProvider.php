@@ -17,6 +17,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeObserver,
     MakePolicy,
     MakeRequest,
+    MakeResource,
 };
 
 class ArtisanProvider extends ArtisanServiceProvider
@@ -141,6 +142,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.request.make', static function ($app) {
             return new MakeRequest($app['files']);
+        });
+    }
+
+    /**
+     * Register the RESOURCE command
+     */
+    protected function registerResourceMakeCommand(): void
+    {
+        $this->app->singleton('command.resource.make', static function ($app) {
+            return new MakeResource($app['files']);
         });
     }
 }

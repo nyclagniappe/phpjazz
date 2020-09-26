@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+
+class DummyClass extends JsonResource
+{
+    /**
+     * Transform the resource into an array
+     * @param Request $request
+     * @return array
+     */
+    public function toArray($request): array
+    {
+        return parent::toArray($request);
+    }
+}
