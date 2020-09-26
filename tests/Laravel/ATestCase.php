@@ -23,13 +23,13 @@ abstract class ATestCase extends LaravelTestCase
     protected const APP_PATH = self::SANDBOX . '/app';
 
     /**
-     * Tear Down
+     * Set Up
      * @throws
      * @postcondition clears the APP and DATABASE directories of created files
      */
-    public function tearDown(): void
+    public function setUp(): void
     {
-        parent::tearDown();
+        parent::setUp();
 
         $deleteDir = static function (string $path) use (&$deleteDir) {
             $dir = new DirectoryIterator($path);
@@ -47,6 +47,7 @@ abstract class ATestCase extends LaravelTestCase
             }
         };
 
+        $deleteDir(self::SANDBOX . '/bootstrap/cache');
         $deleteDir(self::SANDBOX . '/app');
         $deleteDir(self::SANDBOX . '/database/factories');
         $deleteDir(self::SANDBOX . '/database/migrations');

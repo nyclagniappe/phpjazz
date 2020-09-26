@@ -2,14 +2,12 @@
 <ruleset name="PHPStandard">
     <description>PHP Coding Standards</description>
 
-    <file>app</file>
+    <file>src</file>
     <file>tests</file>
 
     <autoload>vendor/autoload.php</autoload>
 
-    <exclude-pattern>*/build/*</exclude-pattern>
-    <exclude-pattern>*/docs/*</exclude-pattern>
-    <exclude-pattern>*/tests/Mocks/*</exclude-pattern>
+    <exclude-pattern>*/sandbox/*</exclude-pattern>
 
 
 
