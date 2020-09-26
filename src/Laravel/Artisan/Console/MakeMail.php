@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Jazz\Laravel\Artisan\Console;
 
-use Illuminate\Foundation\Console\NotificationMakeCommand;
+use Illuminate\Foundation\Console\MailMakeCommand;
 use Jazz\Laravel\Artisan\{
     TModuleOptions,
     TModulePath,
@@ -13,7 +13,7 @@ use Jazz\Laravel\Artisan\{
     TModuleMarkdownTemplate,
 };
 
-class MakeNotification extends NotificationMakeCommand
+class MakeMail extends MailMakeCommand
 {
     use TModuleOptions;
     use TModulePath;
@@ -27,9 +27,9 @@ class MakeNotification extends NotificationMakeCommand
      */
     protected function getStub(): string
     {
-        $stubFile = 'notification.stub';
+        $stubFile = 'mail.stub';
         if ($this->option('markdown')) {
-            $stubFile = 'notification.markdown.stub';
+            $stubFile = 'mail.markdown.stub';
         }
         return $this->getStubFile($stubFile);
     }

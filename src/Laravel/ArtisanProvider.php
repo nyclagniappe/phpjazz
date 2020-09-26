@@ -13,6 +13,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeException,
     MakeJob,
     MakeListener,
+    MakeMail,
     MakeMiddleware,
     MakeNotification,
     MakeObserver,
@@ -104,6 +105,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.listener.make', static function ($app) {
             return new MakeListener($app['files']);
+        });
+    }
+
+    /**
+     * Register the MAIL command
+     */
+    protected function registerMailMakeCommand(): void
+    {
+        $this->app->singleton('command.mail.make', static function ($app) {
+            return new MakeMail($app['files']);
         });
     }
 
