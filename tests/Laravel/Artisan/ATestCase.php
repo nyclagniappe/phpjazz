@@ -111,7 +111,7 @@ abstract class ATestCase extends BaseTestCase
     }
 
     /**
-     * Returns NAMESPACE
+     * Returns CLASS NAME with NAMESPACE
      * @param string $className
      * @param string|null $module
      * @return string

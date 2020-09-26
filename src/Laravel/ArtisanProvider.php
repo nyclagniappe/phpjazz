@@ -15,6 +15,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeController,
     MakeEvent,
     MakeException,
+    MakeFactory,
     MakeJob,
     MakeListener,
     MakeMail,
@@ -38,6 +39,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         'MakeController' => MakeController::class,
         'MakeEvent' => MakeEvent::class,
         'MakeException' => MakeException::class,
+        'MakeFactory' => MakeFactory::class,
         'MakeJob' => MakeJob::class,
         'MakeListener' => MakeListener::class,
         'MakeMail' => MakeMail::class,
@@ -134,6 +136,16 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton('command.exception.make', static function ($app) {
             return new MakeException($app['files']);
+        });
+    }
+
+    /**
+     * Register the FACTORY command
+     */
+    protected function registerMakeFactoryCommand(): void
+    {
+        $this->app->singleton('command.factory.make', static function ($app) {
+            return new MakeFactory($app['files']);
         });
     }
 

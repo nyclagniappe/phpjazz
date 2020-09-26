@@ -14,8 +14,6 @@ class MakeMigrationTest extends ATestCase
     protected $myCommand = 'make:migration';
     protected $myComponent = 'Database.Migrations';
 
-    protected $myDatePrefix = '12345';
-
     /**
      * Set Up
      */
