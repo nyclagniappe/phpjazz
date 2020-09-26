@@ -16,6 +16,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeMiddleware,
     MakeObserver,
     MakePolicy,
+    MakeRequest,
 };
 
 class ArtisanProvider extends ArtisanServiceProvider
@@ -130,6 +131,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.policy.make', static function ($app) {
             return new MakePolicy($app['files']);
+        });
+    }
+
+    /**
+     * Register the command
+     */
+    protected function registerRequestMakeCommand(): void
+    {
+        $this->app->singleton('command.request.make', static function ($app) {
+            return new MakeRequest($app['files']);
         });
     }
 }
