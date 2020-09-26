@@ -9,6 +9,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeCast,
     MakeChannel,
     MakeConsole,
+    MakeController,
     MakeEvent,
     MakeException,
     MakeJob,
@@ -65,6 +66,16 @@ class ArtisanProvider extends ArtisanServiceProvider
     {
         $this->app->singleton('command.console.make', static function ($app) {
             return new MakeConsole($app['files']);
+        });
+    }
+
+    /**
+     * Register the CONTROLLER command
+     */
+    protected function registerControllerMakeCommand(): void
+    {
+        $this->app->singleton('command.controller.make', static function ($app) {
+            return new MakeController($app['files']);
         });
     }
 

@@ -1,0 +1,75 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use DummyFullModelClass as DummyModelClass;
+use ParentDummyFullModelClass as ParentDummyModelClass;
+
+class DummyClass extends Controller
+{
+    /**
+     * Display a listing of the resource
+     * @param ParentDummyModelClass $ParentDummyModelVariable
+     * @return Response
+     */
+    public function index(ParentDummyModelClass $ParentDummyModelVariable): Response
+    {
+        return response()->json(['method' => __METHOD__]);
+    }
+
+    /**
+     * Store a newly created resource in storage
+     * @param Request $request
+     * @param ParentDummyModelClass $ParentDummyModelVariable
+     * @return Response
+     */
+    public function store(Request $request, ParentDummyModelClass $ParentDummyModelVariable): Response
+    {
+        return response()->json(['method' => __METHOD__]);
+    }
+
+    /**
+     * Display the specified resource
+     * @param ParentDummyModelClass $ParentDummyModelVariable
+     * @param DummyModelClass $DummyModelVariable
+     * @return Response
+     */
+    public function show(
+        ParentDummyModelClass $ParentDummyModelVariable,
+        DummyModelClass $DummyModelVariable
+    ): Response {
+        return response()->json(['method' => __METHOD__]);
+    }
+
+    /**
+     * Update the specified resource in storage
+     * @param Request $request
+     * @param ParentDummyModelClass $ParentDummyModelVariable
+     * @param DummyModelClass $DummyModelVariable
+     * @return Response
+     */
+    public function update(
+        Request $request,
+        ParentDummyModelClass $ParentDummyModelVariable,
+        DummyModelClass $DummyModelVariable
+    ): Response {
+        return response()->json(['method' => __METHOD__]);
+    }
+
+    /**
+     * Remove the specified resource from storage
+     * @param ParentDummyModelClass $ParentDummyModelVariable
+     * @param DummyModelClass $DummyModelVariable
+     * @return Response
+     */
+    public function destroy(
+        ParentDummyModelClass $ParentDummyModelVariable,
+        DummyModelClass $DummyModelVariable
+    ): Response {
+        return response()->json(['method' => __METHOD__]);
+    }
+}
