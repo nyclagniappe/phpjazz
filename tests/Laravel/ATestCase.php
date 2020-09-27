@@ -51,7 +51,7 @@ abstract class ATestCase extends LaravelTestCase
         $deleteDir(self::SANDBOX . '/app');
         $deleteDir(self::SANDBOX . '/database/factories');
         $deleteDir(self::SANDBOX . '/database/migrations');
-        $deleteDir(self::SANDBOX . '/database/seeds');
+        $deleteDir(self::SANDBOX . '/database/seeders');
         $deleteDir(self::SANDBOX . '/resources/views');
     }
 

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace JazzTest\Laravel\Artisan\Console;
 
 use JazzTest\Laravel\Artisan\ATestCase;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MakeFactoryTest extends ATestCase
+class MakeSeederTest extends ATestCase
 {
-    protected $myCommand = 'make:factory';
-    protected $myComponent = 'Database.Factories';
+    protected $myCommand = 'make:seeder';
+    protected $myComponent = 'Database.Seeders';
 
     /**
      * Data Provider
@@ -21,11 +21,8 @@ class MakeFactoryTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyUser', false, []],
-            ['My.User', false, []],
-
-            ['MyUser', true, []],
-            ['My.User', true, []],
+            ['MySeeder', false, null],
+            ['MySeeder', true, null],
         ];
     }
 
@@ -38,8 +35,8 @@ class MakeFactoryTest extends ATestCase
     {
         parent::assertions($class, $args);
         $this->assertTrue(
-            is_subclass_of($class, Factory::class, true),
-            'Does not extend ' . Factory::class
+            is_subclass_of($class, Seeder::class, true),
+            'Does not extend ' . Seeder::class
         );
     }
 
@@ -53,13 +50,13 @@ class MakeFactoryTest extends ATestCase
      */
     protected function getMyPath(string $className, ?string $module): string
     {
-        $className = str_replace(['.', '\\'], '/', Str::finish($className, 'Factory'));
+        $className = str_replace(['.', '\\'], '/', Str::finish($className, 'Seeder'));
 
         $path = $this->app->basePath() . '/';
         if ($module) {
             $path .= Config::get('modules.path') . '/' . $this->myModule . '/resources/';
         }
-        $path .= 'database/factories/' . $className . '.php';
+        $path .= 'database/seeders/' . $className . '.php';
 
         return $path;
     }
@@ -75,6 +72,6 @@ class MakeFactoryTest extends ATestCase
         $className = str_replace(['.', '/'], '\\', $className);
         $className = parent::getMyClass($className, $module);
         $className = Str::replaceFirst('App\\Database', 'Database', $className);
-        return Str::finish($className, 'Factory');
+        return Str::finish($className, 'Seeder');
     }
 }

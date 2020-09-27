@@ -14,7 +14,7 @@ trait TModulePath
      * @param string $name
      * @return string
      */
-    protected function getPath($name): ?string
+    protected function getPath($name): string
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 

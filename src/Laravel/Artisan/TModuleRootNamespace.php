@@ -12,7 +12,7 @@ trait TModuleRootNamespace
      * Get the root namespace for the class
      * @return string
      */
-    protected function rootNamespace(): ?string
+    protected function rootNamespace(): string
     {
         $ret = $this->laravel->getNamespace();
 

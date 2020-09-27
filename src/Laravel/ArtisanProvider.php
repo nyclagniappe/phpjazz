@@ -27,6 +27,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeRequest,
     MakeResource,
     MakeRule,
+    MakeSeeder,
 };
 use Jazz\Laravel\Artisan\MigrationCreator;
 
@@ -51,6 +52,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         'MakeRequest' => MakeRequest::class,
         'MakeResource' => MakeResource::class,
         'MakeRule' => MakeRule::class,
+        'MakeSeeder' => MakeSeeder::class,
     ];
 
 
@@ -262,6 +264,16 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton('command.rule.make', static function ($app) {
             return new MakeRule($app['files']);
+        });
+    }
+
+    /**
+     * Register the SEEDER command
+     */
+    protected function registerMakeSeederCommand(): void
+    {
+        $this->app->singleton('command.seeder.make', static function ($app) {
+            return new MakeSeeder($app['files']);
         });
     }
 }
