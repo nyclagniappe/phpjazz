@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Jazz\Laravel;
 
+use Illuminate\Database\Eloquent\Factories\Factory as LaravelFactory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Foundation\Providers\ArtisanServiceProvider;
@@ -31,6 +32,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeSeeder,
     Seed,
 };
+use Jazz\Laravel\Database\Factory;
 use Jazz\Laravel\Artisan\MigrationCreator;
 
 class ArtisanProvider extends ServiceProvider implements DeferrableProvider
@@ -83,6 +85,13 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
             $call = 'register' . $method . 'Command';
             $this->{$call}();
         }
+
+        LaravelFactory::guessFactoryNamesUsing(function (string $model) {
+            return Factory::resolveFactory($model);
+        });
+        LaravelFactory::guessModelNamesUsing(function (LaravelFactory $factory) {
+            return Factory::resolveModel($factory);
+        });
     }
 
     /**
