@@ -29,6 +29,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeResource,
     MakeRule,
     MakeSeeder,
+    Seed,
 };
 use Jazz\Laravel\Artisan\MigrationCreator;
 
@@ -55,6 +56,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         'MakeResource' => MakeResource::class,
         'MakeRule' => MakeRule::class,
         'MakeSeeder' => MakeSeeder::class,
+        'Seed' => Seed::class,
     ];
 
 
@@ -81,6 +83,16 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
             $call = 'register' . $method . 'Command';
             $this->{$call}();
         }
+    }
+
+    /**
+     * Register the SEED command
+     */
+    protected function registerSeedCommand(): void
+    {
+        $this->app->singleton('command.seed', function ($app) {
+            return new Seed($app['db']);
+        });
     }
 
     /**
