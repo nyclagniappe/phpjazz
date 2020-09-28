@@ -24,6 +24,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeNotification,
     MakeObserver,
     MakePolicy,
+    MakeProvider,
     MakeRequest,
     MakeResource,
     MakeRule,
@@ -49,6 +50,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         'MakeNotification' => MakeNotification::class,
         'MakeObserver' => MakeObserver::class,
         'MakePolicy' => MakePolicy::class,
+        'MakeProvider' => MakeProvider::class,
         'MakeRequest' => MakeRequest::class,
         'MakeResource' => MakeResource::class,
         'MakeRule' => MakeRule::class,
@@ -234,6 +236,16 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton('command.policy.make', static function ($app) {
             return new MakePolicy($app['files']);
+        });
+    }
+
+    /**
+     * Register the PROVIDER command
+     */
+    protected function registerMakeProviderCommand(): void
+    {
+        $this->app->singleton('command.provider.make', static function ($app) {
+            return new MakeProvider($app['files']);
         });
     }
 
