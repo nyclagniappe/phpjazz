@@ -31,6 +31,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeResource,
     MakeRule,
     MakeSeeder,
+    MakeTest,
     Seed,
 };
 use Jazz\Laravel\Database\Factory;
@@ -60,6 +61,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         'MakeResource' => MakeResource::class,
         'MakeRule' => MakeRule::class,
         'MakeSeeder' => MakeSeeder::class,
+        'MakeTest' => MakeTest::class,
         'Seed' => Seed::class,
     ];
 
@@ -319,6 +321,16 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton('command.seeder.make', static function ($app) {
             return new MakeSeeder($app['files']);
+        });
+    }
+
+    /**
+     * Register the MAKE TEST command
+     */
+    protected function registerMakeTestCommand(): void
+    {
+        $this->app->singleton('command.test.make', static function ($app) {
+            return new MakeTest($app['files']);
         });
     }
 }

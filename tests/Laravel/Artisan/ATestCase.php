@@ -18,6 +18,8 @@ abstract class ATestCase extends BaseTestCase
     protected $myModulePath = 'Modules';
     protected $myModule = 'Test';
 
+    protected $myArgs = [];
+
 
     /**
      * Test RUN
@@ -41,6 +43,7 @@ abstract class ATestCase extends BaseTestCase
         $args['--module'] = $module;
         $args['--no-interaction'] = true;
 
+        $this->myArgs = $args;
         $this->artisan($this->myCommand, $args)
             ->assertExitCode(0);
 
@@ -95,6 +98,7 @@ abstract class ATestCase extends BaseTestCase
      * Returns PATH
      * @param string $className
      * @param string|null $module
+     * @param array $args
      * @return string
      */
     protected function getMyPath(string $className, ?string $module): string
@@ -114,6 +118,7 @@ abstract class ATestCase extends BaseTestCase
      * Returns CLASS NAME with NAMESPACE
      * @param string $className
      * @param string|null $module
+     * @param array $args
      * @return string
      */
     protected function getMyClass(string $className, ?string $module): string

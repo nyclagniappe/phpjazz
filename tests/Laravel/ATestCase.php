@@ -17,6 +17,9 @@ use Illuminate\Contracts\{
 };
 use Illuminate\Events\Dispatcher;
 
+require_once __DIR__ . '/sandbox/tests/CreatesApplication.php';
+require_once __DIR__ . '/sandbox/tests/TestCase.php';
+
 abstract class ATestCase extends LaravelTestCase
 {
     protected const SANDBOX = __DIR__ . '/sandbox';
@@ -53,6 +56,8 @@ abstract class ATestCase extends LaravelTestCase
         $deleteDir(self::SANDBOX . '/database/migrations');
         $deleteDir(self::SANDBOX . '/database/seeders');
         $deleteDir(self::SANDBOX . '/resources/views');
+        $deleteDir(self::SANDBOX . '/tests/Feature');
+        $deleteDir(self::SANDBOX . '/tests/Unit');
     }
 
     /**
