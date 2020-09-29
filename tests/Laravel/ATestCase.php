@@ -35,6 +35,10 @@ abstract class ATestCase extends LaravelTestCase
         parent::setUp();
 
         $deleteDir = static function (string $path) use (&$deleteDir) {
+            if (!is_dir($path)) {
+                return;
+            }
+
             $dir = new DirectoryIterator($path);
             foreach ($dir as $file) {
                 if ($file->isDot() || $file->getFilename() === '.gitignore') {
@@ -56,6 +60,7 @@ abstract class ATestCase extends LaravelTestCase
         $deleteDir(self::SANDBOX . '/database/migrations');
         $deleteDir(self::SANDBOX . '/database/seeders');
         $deleteDir(self::SANDBOX . '/resources/views');
+        $deleteDir(self::SANDBOX . '/stubs');
         $deleteDir(self::SANDBOX . '/tests/Feature');
         $deleteDir(self::SANDBOX . '/tests/Unit');
     }

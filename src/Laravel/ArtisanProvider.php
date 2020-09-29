@@ -9,8 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Foundation\Providers\ArtisanServiceProvider;
 use Illuminate\Database\MigrationServiceProvider;
-use Jazz\Laravel\Artisan\Console\{
-    MakeCast,
+use Jazz\Laravel\Artisan\Console\{MakeCast,
     MakeChannel,
     MakeConsole,
     MakeController,
@@ -33,7 +32,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeSeeder,
     MakeTest,
     Seed,
-};
+    StubPublish};
 use Jazz\Laravel\Database\Factory;
 use Jazz\Laravel\Artisan\MigrationCreator;
 
@@ -63,6 +62,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         'MakeSeeder' => MakeSeeder::class,
         'MakeTest' => MakeTest::class,
         'Seed' => Seed::class,
+        'StubPublish' => StubPublish::class,
     ];
 
 
@@ -85,7 +85,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
      */
     public function register(): void
     {
-        foreach ($this->commands as $method => $class) {
+        foreach (array_keys($this->commands) as $method) {
             $call = 'register' . $method . 'Command';
             $this->{$call}();
         }
@@ -98,6 +98,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         });
     }
 
+
     /**
      * Register the SEED command
      */
@@ -108,6 +109,18 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         });
     }
 
+    /**
+     * Register STUB PUBLISH command
+     */
+    protected function registerStubPublishCommand(): void
+    {
+        $this->app->singleton('command.stub.publish', function () {
+            return new StubPublish();
+        });
+    }
+
+
+    // MAKE Commands
     /**
      * Register the CAST command
      */
