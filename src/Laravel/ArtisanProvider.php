@@ -22,6 +22,7 @@ use Jazz\Laravel\Artisan\Console\{
     MakeMail,
     MakeMiddleware,
     MakeMigration,
+    MakeModel,
     MakeNotification,
     MakeObserver,
     MakePolicy,
@@ -50,6 +51,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
         'MakeMail' => MakeMail::class,
         'MakeMiddleware' => MakeMiddleware::class,
         'MakeMigration' => MakeMigration::class,
+        'MakeModel' => MakeModel::class,
         'MakeNotification' => MakeNotification::class,
         'MakeObserver' => MakeObserver::class,
         'MakePolicy' => MakePolicy::class,
@@ -227,6 +229,16 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
             $creator = $app['migration.creator'];
             $composer = $app['composer'];
             return new MakeMigration($creator, $composer);
+        });
+    }
+
+    /**
+     * Register the MAKE MODEL command
+     */
+    protected function registerMakeModelCommand(): void
+    {
+        $this->app->singleton('command.model.make', static function ($app) {
+            return new MakeModel($app['files']);
         });
     }
 
