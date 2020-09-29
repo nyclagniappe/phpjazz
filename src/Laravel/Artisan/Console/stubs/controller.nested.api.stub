@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
+use {{ rootNamespace }}\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use DummyFullModelClass as DummyModelClass;
-use ParentDummyFullModelClass as ParentDummyModelClass;
+use {{ namespacedModel }} as {{ model }};
+use {{ namespacedParentModel }} as {{ parentModel }};
 
-class DummyClass extends Controller
+class {{ class }} extends Controller
 {
     /**
      * Display a listing of the resource
-     * @param ParentDummyModelClass $ParentDummyModelVariable
+     * @param {{ parentModel }} ${{ parentModelVariable }}
      * @return Response
      */
-    public function index(ParentDummyModelClass $ParentDummyModelVariable): Response
+    public function index({{ parentModel }} ${{ parentModelVariable }}): Response
     {
         return response()->json(['method' => __METHOD__]);
     }
@@ -24,23 +25,23 @@ class DummyClass extends Controller
     /**
      * Store a newly created resource in storage
      * @param Request $request
-     * @param ParentDummyModelClass $ParentDummyModelVariable
+     * @param {{ parentModel }} ${{ parentModelVariable }}
      * @return Response
      */
-    public function store(Request $request, ParentDummyModelClass $ParentDummyModelVariable): Response
+    public function store(Request $request, {{ parentModel }} ${{ parentModelVariable }}): Response
     {
         return response()->json(['method' => __METHOD__]);
     }
 
     /**
      * Display the specified resource
-     * @param ParentDummyModelClass $ParentDummyModelVariable
-     * @param DummyModelClass $DummyModelVariable
+     * @param {{ parentModel }} ${{ parentModelVariable }}
+     * @param {{ model }} ${{ modelVariable }}
      * @return Response
      */
     public function show(
-        ParentDummyModelClass $ParentDummyModelVariable,
-        DummyModelClass $DummyModelVariable
+        {{ parentModel }} ${{ parentModelVariable }},
+        {{ model }} ${{ modelVariable }}
     ): Response {
         return response()->json(['method' => __METHOD__]);
     }
@@ -48,27 +49,27 @@ class DummyClass extends Controller
     /**
      * Update the specified resource in storage
      * @param Request $request
-     * @param ParentDummyModelClass $ParentDummyModelVariable
-     * @param DummyModelClass $DummyModelVariable
+     * @param {{ parentModel }} ${{ parentModelVariable }}
+     * @param {{ model }} ${{ modelVariable }}
      * @return Response
      */
     public function update(
         Request $request,
-        ParentDummyModelClass $ParentDummyModelVariable,
-        DummyModelClass $DummyModelVariable
+        {{ parentModel }} ${{ parentModelVariable }},
+        {{ model }} ${{ modelVariable }}
     ): Response {
         return response()->json(['method' => __METHOD__]);
     }
 
     /**
      * Remove the specified resource from storage
-     * @param ParentDummyModelClass $ParentDummyModelVariable
-     * @param DummyModelClass $DummyModelVariable
+     * @param {{ parentModel }} ${{ parentModelVariable }}
+     * @param {{ model }} ${{ modelVariable }}
      * @return Response
      */
     public function destroy(
-        ParentDummyModelClass $ParentDummyModelVariable,
-        DummyModelClass $DummyModelVariable
+        {{ parentModel }} ${{ parentModelVariable }},
+        {{ model }} ${{ modelVariable }}
     ): Response {
         return response()->json(['method' => __METHOD__]);
     }

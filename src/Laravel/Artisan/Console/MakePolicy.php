@@ -35,17 +35,17 @@ class MakePolicy extends PolicyMakeCommand
         $dummyUser = class_basename($this->userProviderModel());
         $dummyModel = Str::camel($model) === 'user' ? 'model' : $model;
 
-        return str_replace(
-            ['DocDummyModel', 'DummyModel', 'dummyModel', 'DummyUser', 'DocDummyPluralModel'],
-            [
-                Str::snake($dummyModel, ' '),
-                $model,
-                Str::camel($dummyModel),
-                $dummyUser,
-                Str::snake(Str::pluralStudly($dummyModel), ' ')
-            ],
+        $stub = str_replace(['DocDummyModel', '{{docModel}}', '{{ docModel }}'], Str::snake($dummyModel, ' '), $stub);
+        $stub = str_replace(['DummyModel', '{{model}}', '{{ model }}'], $model, $stub);
+        $stub = str_replace(['dummyModel', '{{modelVariable}}', '{{ modelVariable }}'], Str::camel($dummyModel), $stub);
+        $stub = str_replace(['DummyUser', '{{user}}', '{{ user }}'], $dummyUser, $stub);
+        $stub = str_replace(
+            ['DocDummyPluralModel', '{{docPluralModel}}', '{{ docPluralModel }}'],
+            Str::snake(Str::pluralStudly($dummyModel), ' '),
             $stub
         );
+
+        return $stub;
     }
 
     /**

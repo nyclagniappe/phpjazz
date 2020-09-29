@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
-use NamespacedDummyUserModel as DummyUser;
+use {{ namespacedUserModel }} as {{ user }};
 
-class DummyClass
+class {{ class }}
 {
 
     /**
@@ -19,10 +19,10 @@ class DummyClass
 
     /**
      * Authenticate the user's access to the channel
-     * @param DummyUser $user
+     * @param {{ user }} $user
      * @return array|bool
      */
-    public function join(DummyUser $user)
+    public function join({{ user }} $user)
     {
         //
     }

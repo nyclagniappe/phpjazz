@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
-class DummyClass implements CastsAttributes
+class {{ class }} implements CastsAttributes
 {
     /**
      * Cast the given value

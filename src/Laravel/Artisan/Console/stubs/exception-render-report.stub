@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class DummyClass extends Exception
+class {{ class }} extends Exception
 {
     /**
      * Report the exception

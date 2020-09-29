@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Console\Command;
 
-class DummyClass extends Command
+class {{ class }} extends Command
 {
-    protected $signature = 'dummy:command';
+    protected $signature = '{{ command }}';
     protected $description = 'Command description';
 
 

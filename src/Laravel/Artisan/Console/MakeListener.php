@@ -36,10 +36,15 @@ class MakeListener extends ListenerMakeCommand
             $event = $this->rootNamespace() . 'Events\\' . $event;
         }
 
-        return str_replace(
-            ['DummyEvent', 'DummyFullEvent'],
-            [class_basename($event), trim($event, '\\')],
+        $name = str_replace(
+            ['DummyEvent', '{{event}}', '{{ event }}'],
+            class_basename($name),
             GeneratorCommand::buildClass($name)
+        );
+        return str_replace(
+            ['DummyFullEvent', '{{fullEvent}}', '{{ fullEvent }}'],
+            trim($event, '\\'),
+            $name
         );
     }
 

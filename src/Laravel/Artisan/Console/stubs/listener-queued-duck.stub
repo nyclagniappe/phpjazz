@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DummyClass implements ShouldQueue
+class {{ class }} implements ShouldQueue
 {
     use InteractsWithQueue;
 

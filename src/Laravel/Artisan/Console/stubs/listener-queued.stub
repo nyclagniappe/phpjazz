@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
-use DummyFullEvent;
+use {{ fullEvent }};
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DummyClass implements ShouldQueue
+class {{ class }} implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -22,9 +22,9 @@ class DummyClass implements ShouldQueue
 
     /**
      * Handle the event
-     * @param DummyEvent $event
+     * @param {{ event }} $event
      */
-    public function handle(DummyEvent $event): void
+    public function handle({{ event }} $event): void
     {
         //
     }

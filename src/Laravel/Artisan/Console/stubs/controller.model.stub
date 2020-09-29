@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
+use {{ rootNamespace }}\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use DummyFullModelClass as DummyModelClass;
+use {{ namespacedModel }} as {{ model }};
 
-class DummyClass extends Controller
+class {{ class }} extends Controller
 {
     /**
      * Display a listing of the resource
@@ -40,20 +41,20 @@ class DummyClass extends Controller
 
     /**
      * Display the specified resource
-     * @param DummyModelClass $DummyModelVariable
+     * @param {{ model }} ${{ modelVariable }}
      * @return Response
      */
-    public function show(DummyModelClass $DummyModelVariable): Response
+    public function show({{ model }} ${{ modelVariable }}): Response
     {
         return response()->view('show', ['method' => __METHOD__]);
     }
 
     /**
      * Show the form for editing the specified resource
-     * @param DummyModelClass $DummyModelVariable
+     * @param {{ model }} ${{ modelVariable }}
      * @return Response
      */
-    public function edit(DummyModelClass $DummyModelVariable): Response
+    public function edit({{ model }} ${{ modelVariable }}): Response
     {
         return response()->view('edit', ['method' => __METHOD__]);
     }
@@ -61,20 +62,20 @@ class DummyClass extends Controller
     /**
      * Update the specified resource in storage
      * @param Request $request
-     * @param DummyModelClass $DummyModelVariable
+     * @param {{ model }} ${{ modelVariable }}
      * @return Response
      */
-    public function update(Request $request, DummyModelClass $DummyModelVariable): Response
+    public function update(Request $request, {{ model }} ${{ modelVariable }}): Response
     {
         return redirect()->route('index');
     }
 
     /**
      * Remove the specified resource from storage
-     * @param DummyModelClass $DummyModelVariable
+     * @param {{ model }} ${{ modelVariable }}
      * @return Response
      */
-    public function destroy(DummyModelClass $DummyModelVariable): Response
+    public function destroy({{ model }} ${{ modelVariable }}): Response
     {
         return redirect()->route('index');
     }

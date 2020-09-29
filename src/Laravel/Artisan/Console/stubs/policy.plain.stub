@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
-use NamespacedDummyUserModel as DummyUser;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use {{ namespacedUserModel }};
 
-class DummyClass
+class {{ class }}
 {
     use HandlesAuthorization;
 

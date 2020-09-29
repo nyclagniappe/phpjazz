@@ -32,11 +32,11 @@ class MakeObserver extends ObserverMakeCommand
     {
         $this->replaceStubModel($stub, $model);
 
-        return str_replace(
-            ['DocDummyModel', 'DummyModel', 'dummyModel'],
-            [Str::snake($model, ' '), $model, Str::camel($model)],
-            $stub
-        );
+        $stub = str_replace(['DocDummyModel', '{{docModel}}', '{{ docModel }}'], Str::snake($model, ' '), $stub);
+        $stub = str_replace(['DummyModel', '{{model}}', '{{ model }}'], $model, $stub);
+        $stub = str_replace(['dummyModel', '{{modelVariable}}', '{{ modelVariable }}'], Str::camel($model), $stub);
+
+        return $stub;
     }
 
     /**

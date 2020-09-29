@@ -27,9 +27,17 @@ trait TModuleStubModel
         }
 
         if (Str::startsWith($model, '\\')) {
-            $stub = str_replace('NamespacedDummyModel', trim($model, '\\'), $stub);
+            $stub = str_replace(
+                ['NamespacedDummyModel', '{{namespacedModel}}', '{{ namespacedModel }}'],
+                trim($model, '\\'),
+                $stub
+            );
         } else {
-            $stub = str_replace('NamespacedDummyModel', $namespaceModel, $stub);
+            $stub = str_replace(
+                ['NamespacedDummyModel', '{{namespacedModel}}', '{{ namespacedModel }}'],
+                $namespaceModel,
+                $stub
+            );
         }
 
         $stub = str_replace(

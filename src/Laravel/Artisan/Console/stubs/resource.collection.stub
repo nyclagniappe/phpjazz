@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Request;
 
-class DummyClass extends ResourceCollection
+class {{ class }} extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array

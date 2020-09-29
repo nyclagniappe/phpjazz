@@ -2,53 +2,53 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
-use NamespacedDummyModel as DummyModel;
+use {{ namespacedModel }} as {{ model }};
 
-class DummyClass
+class {{ class }}
 {
     /**
-     * Handle the DocDummyModel "created" event
-     * @param DummyModel $dummyModel
+     * Handle the {{ docModel }} "created" event
+     * @param {{ model }} ${{ modelVariable }}
      */
-    public function created(DummyModel $dummyModel): void
+    public function created({{ model }} ${{ modelVariable }}): void
     {
         //
     }
 
     /**
-     * Handle the DocDummyModel "updated" event
-     * @param DummyModel $dummyModel
+     * Handle the {{ docModel }} "updated" event
+     * @param {{ model }} ${{ modelVariable }}
      */
-    public function updated(DummyModel $dummyModel): void
+    public function updated({{ model }} ${{ modelVariable }}): void
     {
         //
     }
 
     /**
-     * Handle the DocDummyModel "deleted" event
-     * @param DummyModel $dummyModel
+     * Handle the {{ docModel }} "deleted" event
+     * @param {{ model }} ${{ modelVariable }}
      */
-    public function deleted(DummyModel $dummyModel): void
+    public function deleted({{ model }} ${{ modelVariable }}): void
     {
         //
     }
 
     /**
-     * Handle the DocDummyModel "restored" event
-     * @param DummyModel $dummyModel
+     * Handle the {{ docModel }} "restored" event
+     * @param {{ model }} ${{ modelVariable }}
      */
-    public function restored(DummyModel $dummyModel): void
+    public function restored({{ model }} ${{ modelVariable }}): void
     {
         //
     }
 
     /**
-     * Handle the DocDummyModel "force deleted" event
-     * @param DummyModel $dummyModel
+     * Handle the {{ docModel }} "force deleted" event
+     * @param {{ model }} ${{ modelVariable }}
      */
-    public function forceDeleted(DummyModel $dummyModel): void
+    public function forceDeleted({{ model }} ${{ modelVariable }}): void
     {
         //
     }

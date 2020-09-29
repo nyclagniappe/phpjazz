@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DummyClass extends Mailable
+class {{ class }} extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -26,7 +26,7 @@ class DummyClass extends Mailable
      * Build the message
      * @return $this
      */
-    public function build(): DummyClass
+    public function build(): {{ class }}
     {
         return $this->view('view.name');
     }
