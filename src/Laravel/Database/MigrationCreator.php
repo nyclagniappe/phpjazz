@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jazz\Laravel\Artisan;
+namespace Jazz\Laravel\Database;
 
 use Illuminate\Database\Migrations\MigrationCreator as LaravelMigrationCreator;
 
@@ -14,6 +14,6 @@ class MigrationCreator extends LaravelMigrationCreator
      */
     public function stubPath(): string
     {
-        return __DIR__ . '/Console/stubs';
+        return dirname(__DIR__) . '/Artisan/Console/stubs';
     }
 }

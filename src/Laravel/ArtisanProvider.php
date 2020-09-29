@@ -34,7 +34,7 @@ use Jazz\Laravel\Artisan\Console\{MakeCast,
     Seed,
     StubPublish};
 use Jazz\Laravel\Database\Factory;
-use Jazz\Laravel\Artisan\MigrationCreator;
+use Jazz\Laravel\Database\MigrationCreator;
 
 class ArtisanProvider extends ServiceProvider implements DeferrableProvider
 {
