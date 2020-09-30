@@ -21,7 +21,7 @@ class Seed extends SeedCommand
     protected function getSeeder(): Seeder
     {
         $class = $this->option('class');
-        $module = $this->option('module');
+        $module = $this->option(Config::get('modules.key'));
 
         $path = $this->laravel->basePath() . '/';
         if ($module) {

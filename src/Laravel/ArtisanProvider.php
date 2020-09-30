@@ -11,6 +11,7 @@ use Illuminate\Foundation\Providers\ArtisanServiceProvider;
 use Illuminate\Database\MigrationServiceProvider;
 use Jazz\Laravel\Artisan\Console\{MakeCast,
     MakeChannel,
+    MakeComponent,
     MakeConsole,
     MakeController,
     MakeEvent,
@@ -41,6 +42,7 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
     protected $commands = [
         'MakeCast' => MakeCast::class,
         'MakeChannel' => MakeChannel::class,
+        'MakeComponent' => MakeComponent::class,
         'MakeConsole' => MakeConsole::class,
         'MakeController' => MakeController::class,
         'MakeEvent' => MakeEvent::class,
@@ -138,6 +140,16 @@ class ArtisanProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton('command.channel.make', static function ($app) {
             return new MakeChannel($app['files']);
+        });
+    }
+
+    /**
+     * Register the COMPONENT command
+     */
+    protected function registerMakeComponentCommand(): void
+    {
+        $this->app->singleton('command.component.make', static function ($app) {
+            return new MakeComponent($app['files']);
         });
     }
 
