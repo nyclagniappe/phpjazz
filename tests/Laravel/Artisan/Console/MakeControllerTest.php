@@ -12,7 +12,6 @@ class MakeControllerTest extends ATestCase
     protected $myCommand = 'make:controller';
     protected $myComponent = 'Http.Controllers';
 
-
     /**
      * Set Up
      */
@@ -46,6 +45,25 @@ class MakeControllerTest extends ATestCase
     }
 
 
+
+    /**
+     * Calls Artisan
+     * @param string $command
+     * @param array $args
+     */
+    protected function callArtisan(string $command, array $args = []): void
+    {
+        $question = '%s Model does not exist. Do you want to generate it?';
+
+        $artisan = $this->artisan($command, $args);
+        if (isset($args['--parent'])) {
+            $artisan->expectsConfirmation(sprintf($question, $args['--parent']), 'yes');
+        }
+        if (isset($args['--model'])) {
+            $artisan->expectsConfirmation(sprintf($question, $args['--model']), 'yes');
+        }
+        $artisan->assertExitCode(0);
+    }
 
     /**
      * Data Provider
@@ -141,20 +159,4 @@ class MakeControllerTest extends ATestCase
 
         return $methods;
     }
-
-    /**
-     * Returns full MyModel class name
-     * @param string $model
-     * @param string $module
-     * @return string
-
-    private function getMyModel(string $model, ?string $module): string
-    {
-    $ret = $this->myDefaultNamespace . '\\';
-    if ($module !== null) {
-    $ret = $this->myModuleNamespace . '\\' . $this->myModule . '\Models\\';
-    }
-    return $ret . $model;
-    }
-     */
 }

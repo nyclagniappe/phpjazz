@@ -44,8 +44,7 @@ abstract class ATestCase extends BaseTestCase
         $args['--no-interaction'] = true;
 
         $this->myArgs = $args;
-        $this->artisan($this->myCommand, $args)
-            ->assertExitCode(0);
+        $this->callArtisan($this->myCommand, $args);
 
         $file = $this->getMyPath($name, $module);
         $this->assertFileExists($file, $file);
@@ -94,6 +93,17 @@ abstract class ATestCase extends BaseTestCase
 
 
     // HELPER METHODS
+    /**
+     * Calls Artisan
+     * @param string $command
+     * @param array $args
+     */
+    protected function callArtisan(string $command, array $args = []): void
+    {
+        $this->artisan($command, $args)
+            ->assertExitCode(0);
+    }
+
     /**
      * Returns PATH
      * @param string $className

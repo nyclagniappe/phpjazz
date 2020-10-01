@@ -11,6 +11,7 @@ use Jazz\Laravel\Artisan\{
     TModuleOptions,
     TModuleRootNamespace,
     TModuleStubFile,
+    TModuleQualifyModel,
 };
 
 class MakeFactory extends FactoryMakeCommand
@@ -18,6 +19,7 @@ class MakeFactory extends FactoryMakeCommand
     use TModuleOptions;
     use TModuleRootNamespace;
     use TModuleStubFile;
+    use TModuleQualifyModel;
 
     /**
      * Build the Class with given name
@@ -70,23 +72,6 @@ class MakeFactory extends FactoryMakeCommand
     protected function qualifyClass($name): string
     {
         return parent::qualifyClass(str_replace(['.', '/'], '\\', $name));
-    }
-
-    /**
-     * Qualify the given model class base name
-     * @param string $model
-     * @return string
-     */
-    protected function qualifyModel(string $model): string
-    {
-        $model = str_replace(['/', '.'], '\\', ltrim($model, '\\/'));
-        $rootNamespace = $this->rootNamespace();
-
-        if (Str::startsWith($model, $rootNamespace)) {
-            return $model;
-        }
-
-        return $rootNamespace . '\\Models\\' . $model;
     }
 
     /**

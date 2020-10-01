@@ -41,7 +41,7 @@ class StubPublishTest extends ATestCase
     public function provider(): array
     {
         return [
-            [46, false],
+            [47, false],
             [27, true],
         ];
     }

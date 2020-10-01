@@ -7,12 +7,12 @@ namespace Jazz\Laravel\Artisan\Console;
 use Illuminate\Routing\Console\ControllerMakeCommand;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Jazz\Laravel\Artisan\{
     TModuleOptions,
     TModulePath,
     TModuleRootNamespace,
     TModuleStubFile,
+    TModuleQualifyModel,
 };
 
 class MakeController extends ControllerMakeCommand
@@ -21,6 +21,7 @@ class MakeController extends ControllerMakeCommand
     use TModulePath;
     use TModuleRootNamespace;
     use TModuleStubFile;
+    use TModuleQualifyModel;
 
     /**
      * Build the replacements for a parent controller
@@ -28,20 +29,7 @@ class MakeController extends ControllerMakeCommand
      */
     protected function buildParentReplacements(): array
     {
-        $parentModelClass = $this->parseModel($this->option('parent'));
-
-        /* @todo implement when Model Command is completed
-        if (! class_exists($parentModelClass)) {
-            $msg = 'A ' . $parentModelClass . ' model does not exist. Do you want to generate it?';
-            if ($this->confirm($msg, false)) {
-                $packageKey = PackageConfig::key();
-                $this->call('make:model', [
-                    'name' => class_basename($parentModelClass),
-                    '--' . $packageKey => $this->option($packageKey),
-                ]);
-            }
-        }*/
-
+        $parentModelClass = $this->confirmModel($this->option('parent'));
         return [
             'ParentDummyFullModelClass' => $parentModelClass,
             '{{ namespacedParentModel }}' => $parentModelClass,
@@ -62,19 +50,7 @@ class MakeController extends ControllerMakeCommand
      */
     protected function buildModelReplacements(array $replace): array
     {
-        $modelClass = $this->parseModel($this->option('model'));
-
-        /* @todo implement when Model Command completed
-        if (! class_exists($modelClass)) {
-            $msg = 'A ' . $modelClass . ' model does not exist. Do you want to generate it?';
-            if ($this->confirm($msg, false)) {
-                $packageKey = PackageConfig::key();
-                $this->call('make:model', [
-                    'name' => class_basename($modelClass),
-                    '--' . $packageKey => $this->option($packageKey),
-                ]);
-            }
-        }*/
+        $modelClass = $this->confirmModel($this->option('model'));
 
         return array_merge($replace, [
             'DummyFullModelClass' => $modelClass,
@@ -89,32 +65,33 @@ class MakeController extends ControllerMakeCommand
         ]);
     }
 
+
+
     /**
-     * Get the fully-qualified model class name
+     * Confirms Model Creation
      * @param string $model
      * @return string
-     * @throws InvalidArgumentException
      */
-    protected function parseModel($model): string
+    protected function confirmModel(string $model): string
     {
-        if (preg_match('([^A-Za-z0-9_/\\\\])', $model)) {
-            throw new InvalidArgumentException('Model name contains invalid characters.');
-        }
+        $modelClass = $this->parseModel($model);
 
-        $model = trim(str_replace('/', '\\', $model), '\\');
+        if (!class_exists($modelClass)) {
+            $question = class_basename($model) . ' Model does not exist. Do you want to generate it?';
+            if ($this->confirm($question)) {
+                $modelName = str_replace('\\', '/', Str::after($modelClass, 'Models\\'));
+                $moduleKey = Config::get('modules.key');
 
-        $rootNamespace = $this->rootNamespace();
-        if (! Str::startsWith($model, $rootNamespace)) {
-            $model = $rootNamespace . $model;
-            if ($this->option(Config::get('modules.key'))) {
-                $model = $rootNamespace . '\Models\\' . class_basename($model);
+                $args = [
+                    'name' => $modelName,
+                    '--' . $moduleKey => $this->option($moduleKey),
+                ];
+                $this->call('make:model', $args);
             }
         }
 
-        return $model;
+        return $modelClass;
     }
-
-
 
     /**
      * Get the stub file for the generator
