@@ -20,8 +20,7 @@ class StubPublishTest extends ATestCase
             $args['--useLaravel'] = null;
         }
 
-        $this->artisan('stub:publish', $args)
-            ->assertExitCode(0);
+        $this->createArtisan('stub:publish', $args);
 
         $count = 0;
         $dir = new DirectoryIterator(self::SANDBOX . '/stubs');

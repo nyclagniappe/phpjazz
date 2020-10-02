@@ -18,8 +18,8 @@ class MakeChannelTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyChannel', false, null],
-            ['MyChannel', true, null],
+            ['MyChannel', null, null],
+            ['MyChannel', self::MODULE, null],
         ];
     }
 }

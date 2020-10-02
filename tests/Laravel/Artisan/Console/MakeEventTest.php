@@ -18,8 +18,8 @@ class MakeEventTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyEvent', false, null],
-            ['MyEvent', true, null],
+            ['MyEvent', null, null],
+            ['MyEvent', self::MODULE, null],
         ];
     }
 }

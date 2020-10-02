@@ -20,29 +20,31 @@ class MakeListenerTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyListener', false, ['--event' => null, '--queued' => false]],
-            ['MyEventListener', false, ['--event' => 'MyListenerEvent', '--queued' => false]],
-            ['MyQueuedListener', false, ['--event' => null, '--queued' => true]],
-            ['MyQueuedEventListener', false, ['--event' => 'MyListenerEvent', '--queued' => true]],
+            ['MyListener', null, ['--event' => null, '--queued' => false]],
+            ['MyEventListener', null, ['--event' => 'MyListenerEvent', '--queued' => false]],
+            ['MyQueuedListener', null, ['--event' => null, '--queued' => true]],
+            ['MyQueuedEventListener', null, ['--event' => 'MyListenerEvent', '--queued' => true]],
 
-            ['MyListener', true, ['--event' => null, '--queued' => false]],
-            ['MyEventListener', true, ['--event' => 'MyListenerEvent', '--queued' => false]],
-            ['MyQueuedListener', true, ['--event' => null, '--queued' => true]],
-            ['MyQueuedEventListener', true, ['--event' => 'MyListenerEvent', '--queued' => true]],
+            ['MyListener', self::MODULE, ['--event' => null, '--queued' => false]],
+            ['MyEventListener', self::MODULE, ['--event' => 'MyListenerEvent', '--queued' => false]],
+            ['MyQueuedListener', self::MODULE, ['--event' => null, '--queued' => true]],
+            ['MyQueuedEventListener', self::MODULE, ['--event' => 'MyListenerEvent', '--queued' => true]],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $implements = is_subclass_of($class, ShouldQueue::class);
         $this->assertTrue($args['--queued'] ? $implements : !$implements);
         $this->assertMethodInClass($class, 'handle', true);
-
-        $this->assertIsArray($args);
     }
 }

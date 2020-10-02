@@ -30,6 +30,7 @@ class MakeController extends ControllerMakeCommand
     protected function buildParentReplacements(): array
     {
         $parentModelClass = $this->confirmModel($this->option('parent'));
+
         return [
             'ParentDummyFullModelClass' => $parentModelClass,
             '{{ namespacedParentModel }}' => $parentModelClass,

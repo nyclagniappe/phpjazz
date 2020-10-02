@@ -6,7 +6,6 @@ namespace JazzTest\Laravel\Artisan\Console;
 
 use JazzTest\Laravel\Artisan\ATestCase;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class MakeSeederTest extends ATestCase
@@ -21,19 +20,21 @@ class MakeSeederTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MySeeder', false, null],
-            ['MySeeder', true, null],
+            ['MySeeder', null, null],
+            ['MySeeder', self::MODULE, null],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
-        parent::assertions($class, $args);
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $this->assertTrue(
             is_subclass_of($class, Seeder::class, true),
             'Does not extend ' . Seeder::class
@@ -54,7 +55,7 @@ class MakeSeederTest extends ATestCase
 
         $path = $this->app->basePath() . '/';
         if ($module) {
-            $path .= Config::get('modules.path') . '/' . $this->myModule . '/resources/';
+            $path .= $this->myModulePath . '/' . self::MODULE . '/resources/';
         }
         $path .= 'database/seeders/' . $className . '.php';
 

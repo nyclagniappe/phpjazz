@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace JazzTest\Laravel\Artisan\Console;
 
-use JazzTest\Laravel\ATestCase;
-
-class SeedTest extends ATestCase
+class SeedTest extends MakeSeederTest
 {
+
     /**
      * Test RUN
      * @param string|null $name
@@ -17,22 +16,15 @@ class SeedTest extends ATestCase
      */
     public function testRun(?string $name, ?string $module, ?array $args): void
     {
-        if ($name === null) {
-            $this->markTestIncomplete();
-        }
+        parent::testRun($name, $module, $args);
 
-        if ($args === null) {
-            $args = [];
-        }
-        $args['name'] = $name;
-        $args['--module'] = $module;
-        $args['--no-interaction'] = true;
-
-        $this->artisan('make:seeder', $args)
-            ->assertExitCode(0);
-
-        unset($args['name']);
+        $args = ($args ?? []);
         $args['--class'] = $name;
+        $args['--no-interaction'] = true;
+        if ($module) {
+            $args[$this->myModuleKey] = $module;
+        }
+
         $this->artisan('db:seed', $args)
             ->assertExitCode(0);
     }
@@ -44,8 +36,8 @@ class SeedTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MySeeder', null, []],
-            ['MySeeder', 'Test', []],
+            ['MySeedSeeder', null, []],
+            ['MySeedSeeder', self::MODULE, []],
         ];
     }
 }

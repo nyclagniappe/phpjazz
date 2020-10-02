@@ -19,21 +19,25 @@ class MakePolicyTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyPolicy', false, ['--model' => null]],
-            ['MyModelPolicy', false, ['--model' => 'MyFakeModel']],
+            ['MyPolicy', null, ['--model' => null]],
+            ['MyModelPolicy', null, ['--model' => 'MyFakeModel']],
 
-            ['MyPolicy', true, ['--model' => null]],
-            ['MyModelPolicy', true, ['--model' => 'MyFakeModel']],
+            ['MyPolicy', self::MODULE, ['--model' => null]],
+            ['MyModelPolicy', self::MODULE, ['--model' => 'MyFakeModel']],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $hasModel = $args['--model'] !== null;
         $this->assertMethodInClass($class, 'viewAny', $hasModel);
         $this->assertMethodInClass($class, 'view', $hasModel);

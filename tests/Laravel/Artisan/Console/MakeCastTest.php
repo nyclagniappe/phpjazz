@@ -18,8 +18,8 @@ class MakeCastTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyCast', false, null],
-            ['MyCast', true, null],
+            ['MyCast', null, null],
+            ['MyCast', self::MODULE, null],
         ];
     }
 }

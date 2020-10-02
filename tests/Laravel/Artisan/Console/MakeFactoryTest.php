@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace JazzTest\Laravel\Artisan\Console;
 
 use JazzTest\Laravel\Artisan\ATestCase;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,22 +20,24 @@ class MakeFactoryTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyUser', false, []],
-            ['My.User', false, []],
+            ['MyUser', null, []],
+            ['My.User', null, []],
 
-            ['MyUser', true, []],
-            ['My.User', true, []],
+            ['MyUser', self::MODULE, []],
+            ['My.User', self::MODULE, []],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
-        parent::assertions($class, $args);
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $this->assertTrue(
             is_subclass_of($class, Factory::class, true),
             'Does not extend ' . Factory::class
@@ -57,7 +58,7 @@ class MakeFactoryTest extends ATestCase
 
         $path = $this->app->basePath() . '/';
         if ($module) {
-            $path .= Config::get('modules.path') . '/' . $this->myModule . '/resources/';
+            $path .= $this->myModulePath . '/' . self::MODULE . '/resources/';
         }
         $path .= 'database/factories/' . $className . '.php';
 

@@ -5,77 +5,104 @@ declare(strict_types=1);
 namespace JazzTest\Laravel\Artisan;
 
 use JazzTest\Laravel\ATestCase as BaseTestCase;
+use Illuminate\Support\Facades\Config;
 
 abstract class ATestCase extends BaseTestCase
 {
+    protected const MODULE = 'Sandbox';
+
     protected $myCommand;
     protected $myComponent;
 
-    protected $myDefaultNamespace = 'App';
-    protected $myDefaultPath = '';
-
-    protected $myModuleNamespace = 'App\Modules';
-    protected $myModulePath = 'Modules';
-    protected $myModule = 'Test';
+    protected $myModuleKey = '--module';
+    protected $myModuleNamespace = 'App\\Modules\\';
+    protected $myModulePath = 'app/Modules';
+    protected $myModuleName = 'Module';
+    protected $myModules = ['Sandbox'];
 
     protected $myArgs = [];
 
 
     /**
+     * Set Up
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->myModuleKey = '--' . Config::get('modules.key');
+        $this->myModuleNamespace = Config::get('modules.namespace');
+        $this->myModulePath = Config::get('modules.path');
+        $this->myModuleName = Config::get('modules.name');
+        $this->myModules = Config::get('modules.list');
+    }
+
+
+    /**
      * Test RUN
-     * @param string|null $name
-     * @param bool|null $useModule
-     * @param array|null $args
+     * @param string $name
+     * @param ?string $module
+     * @param ?array $args
      * @dataProvider provider
      */
-    public function testRun(?string $name, ?bool $useModule, ?array $args): void
+    public function testRun(string $name, ?string $module, ?array $args): void
     {
         if ($name === null || $this->myCommand === null || $this->myComponent === null) {
             $this->markTestIncomplete();
         }
 
-        $module = $useModule ? $this->myModule : null;
-
-        if ($args === null) {
-            $args = [];
-        }
+        $args = ($args ?? []);
         $args['name'] = $name;
-        $args['--module'] = $module;
         $args['--no-interaction'] = true;
+        if ($module) {
+            $args[$this->myModuleKey] = $module;
+        }
 
         $this->myArgs = $args;
-        $this->callArtisan($this->myCommand, $args);
-
-        $file = $this->getMyPath($name, $module);
-        $this->assertFileExists($file, $file);
-        require_once($file);
-
-        $class = $this->getMyClass($name, $module);
-        $this->assertTrue(class_exists($class), $class);
-
-        $this->assertions($class, $args);
+        $this->createArtisan($this->myCommand, $args);
+        $this->assertions($name, $module);
     }
 
     /**
      * Data Provider
      * @return array
      */
-    public function provider(): array
+    abstract public function provider(): array;
+
+
+    // ASSERTIONS
+    /**
+     * Assertions
+     * @param string $name
+     * @param ?string $module
+     */
+    protected function assertions(string $name, ?string $module): void
     {
-        return [
-            [null, null, null],
-        ];
+        $this->assertMyFileExists($name, $module);
+        $this->assertMyClassExists($name, $module);
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assert File Exists
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertMyFileExists(string $name, ?string $module): void
     {
-        $this->assertIsString($class);
-        $this->assertIsArray($args);
+        $file = $this->getMyPath($name, $module);
+        $this->assertFileExists($file, $file . ' not found');
+        require_once($file);
+    }
+
+    /**
+     * Assert Class Exists
+     * @param string $name
+     * @param ?string $module
+     */
+    protected function assertMyClassExists(string $name, ?string $module): void
+    {
+        $class = $this->getMyClass($name, $module);
+        $this->assertTrue(class_exists($class, false), $class . ' not found');
     }
 
     /**
@@ -94,21 +121,9 @@ abstract class ATestCase extends BaseTestCase
 
     // HELPER METHODS
     /**
-     * Calls Artisan
-     * @param string $command
-     * @param array $args
-     */
-    protected function callArtisan(string $command, array $args = []): void
-    {
-        $this->artisan($command, $args)
-            ->assertExitCode(0);
-    }
-
-    /**
      * Returns PATH
      * @param string $className
      * @param string|null $module
-     * @param array $args
      * @return string
      */
     protected function getMyPath(string $className, ?string $module): string
@@ -117,7 +132,7 @@ abstract class ATestCase extends BaseTestCase
 
         $ret = self::APP_PATH . '/';
         if ($module !== null) {
-            $ret .= $this->myModulePath . '/' . $module . '/';
+            $ret = self::SANDBOX . '/' . $this->myModulePath . '/' . $module . '/';
         }
         $ret .= $component . '/' . $className . '.php';
 
@@ -128,16 +143,15 @@ abstract class ATestCase extends BaseTestCase
      * Returns CLASS NAME with NAMESPACE
      * @param string $className
      * @param string|null $module
-     * @param array $args
      * @return string
      */
     protected function getMyClass(string $className, ?string $module): string
     {
         $component = str_replace('.', '\\', $this->myComponent);
 
-        $ret = $this->myDefaultNamespace . '\\';
+        $ret = self::APP_NAMESPACE;
         if ($module !== null) {
-            $ret = $this->myModuleNamespace . '\\' . $module . '\\';
+            $ret = $this->myModuleNamespace . $module . '\\';
         }
         $ret .= $component . '\\' . $className;
 

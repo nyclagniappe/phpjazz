@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace JazzTest\Laravel\Artisan\Console;
 
+use Illuminate\Testing\PendingCommand;
 use JazzTest\Laravel\Artisan\ATestCase;
 use Illuminate\Filesystem\Filesystem;
 
@@ -14,6 +15,7 @@ class MakeControllerTest extends ATestCase
 
     /**
      * Set Up
+     * @throws
      */
     public function setUp(): void
     {
@@ -33,36 +35,39 @@ class MakeControllerTest extends ATestCase
 
         $path = $this->getMyPath('Controller', null);
         $ns = substr($this->getMyClass('Controller', null), 0, -11);
-        $file->makeDirectory(dirname($path), 0755, true);
+        if (!is_dir(dirname($path))) {
+            $file->makeDirectory(dirname($path), 0755, true);
+        }
         $file->put($path, str_replace('{{NAMESPACE}}', $ns, $contents));
-        require_once($path);
+        $file->requireOnce($path);
 
-        $path = $this->getMyPath('Controller', $this->myModule);
-        $ns = substr($this->getMyClass('Controller', $this->myModule), 0, -11);
-        $file->makeDirectory(dirname($path), 0755, true);
+        $path = $this->getMyPath('Controller', self::MODULE);
+        $ns = substr($this->getMyClass('Controller', self::MODULE), 0, -11);
+        if (!is_dir(dirname($path))) {
+            $file->makeDirectory(dirname($path), 0755, true);
+        }
         $file->put($path, str_replace('{{NAMESPACE}}', $ns, $contents));
-        require_once($path);
+        $file->requireOnce($path);
     }
-
-
 
     /**
      * Calls Artisan
      * @param string $command
      * @param array $args
+     * @return PendingCommand
      */
-    protected function callArtisan(string $command, array $args = []): void
+    protected function createArtisan(string $command, array $args = []): PendingCommand
     {
         $question = '%s Model does not exist. Do you want to generate it?';
 
-        $artisan = $this->artisan($command, $args);
+        $artisan = parent::createArtisan($command, $args);
         if (isset($args['--parent'])) {
             $artisan->expectsConfirmation(sprintf($question, $args['--parent']), 'yes');
         }
         if (isset($args['--model'])) {
             $artisan->expectsConfirmation(sprintf($question, $args['--model']), 'yes');
         }
-        $artisan->assertExitCode(0);
+        return $artisan;
     }
 
     /**
@@ -72,36 +77,55 @@ class MakeControllerTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyController', false, null],
-            ['MyModelController', false, ['--model' => 'MyModel']],
-            ['MyParentController', false, ['--model' => 'MyModel', '--parent' => 'MyParent']],
-            ['MyResourceController', false, ['--resource' => true]],
-            ['MyInvokableController', false, ['--invokable' => true]],
-            ['MyApiController', false, ['--api' => true]],
-            ['MyApiModelController', false, ['--api' => true, '--model' => 'MyModel']],
-            ['MyApiParentController', false, ['--api' => true, '--model' => 'MyModel', '--parent' => 'MyParent']],
+            ['MyController', null, null],
+            ['MyModelController', null, ['--model' => 'MyControllerModel']],
+            ['MyParentController', null, [
+                '--model' => 'MyControllerModelWithParent',
+                '--parent' => 'MyControllerParent'
+            ]],
+            ['MyResourceController', null, ['--resource' => true]],
+            ['MyInvokableController', null, ['--invokable' => true]],
+            ['MyApiController', null, ['--api' => true]],
+            ['MyApiModelController', null, ['--api' => true, '--model' => 'MyControllerApiModel']],
+            ['MyApiParentController', null, [
+                '--api' => true,
+                '--model' => 'MyApiModelWithParent',
+                '--parent' => 'MyApiParent']
+            ],
 
-            ['MyController', true, null],
-            ['MyModelController', true, ['--model' => 'MyModel']],
-            ['MyParentController', true, ['--model' => 'MyModel', '--parent' => 'MyParent']],
-            ['MyResourceController', true, ['--resource' => true]],
-            ['MyInvokableController', true, ['--invokable' => true]],
-            ['MyApiController', true, ['--api' => true]],
-            ['MyApiModelController', true, ['--api' => true, '--model' => 'MyModel']],
-            ['MyApiParentController', true, ['--api' => true, '--model' => 'MyModel', '--parent' => 'MyParent']],
+            ['MyController', self::MODULE, null],
+            ['MyModelController', self::MODULE, ['--model' => 'MyControllerModel']],
+            ['MyParentController', self::MODULE, [
+                '--model' => 'MyControllerModelWithParent',
+                '--parent' => 'MyControllerParent'
+            ]],
+            ['MyResourceController', self::MODULE, ['--resource' => true]],
+            ['MyInvokableController', self::MODULE, ['--invokable' => true]],
+            ['MyApiController', self::MODULE, ['--api' => true]],
+            ['MyApiModelController', self::MODULE, ['--api' => true, '--model' => 'MyControllerApiModel']],
+            ['MyApiParentController', self::MODULE, [
+                '--api' => true,
+                '--model' => 'MyApiModelWithParent',
+                '--parent' => 'MyApiParent']
+            ],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
+
         $baseClass = $this->getMyClass('Controller', null);
-        if ($args['--module'] !== null) {
-            $baseClass = $this->getMyClass('Controller', $args['--module']);
+        if (isset($args[$this->myModuleKey])) {
+            $baseClass = $this->getMyClass('Controller', $args[$this->myModuleKey]);
         }
         $this->assertTrue(is_subclass_of($class, $baseClass));
 

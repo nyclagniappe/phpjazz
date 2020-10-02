@@ -7,7 +7,6 @@ namespace JazzTest\Laravel\Artisan\Console;
 use JazzTest\Laravel\Artisan\ATestCase;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class MakeModelTest extends ATestCase
@@ -22,35 +21,39 @@ class MakeModelTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyModel', false, []],
-            ['MyPivotModel', false, ['--pivot' => null]],
-            ['MyModel', false, ['--factory' => null]],
-            ['MyModel', false, ['--migration' => null]],
-            ['MyModel', false, ['--seed' => null]],
-            ['MyModel', false, ['--controller' => null]],
-            ['MyModel', false, ['--resource' => null]],
-            ['MyModel', false, ['--api' => null]],
-            ['MyModel', false, ['--all' => null]],
+            ['MyModel', null, []],
+            ['MyPivotModel', null, ['--pivot' => null]],
+            ['MyFactoryModel', null, ['--factory' => null]],
+            ['MyMigrationModel', null, ['--migration' => null]],
+            ['MySeedModel', null, ['--seed' => null]],
+            ['MyControllerModel', null, ['--controller' => null]],
+            ['MyResourceModel', null, ['--resource' => null]],
+            ['MyApiModel', null, ['--api' => null]],
+            ['MyAllModel', null, ['--all' => null]],
 
-            ['MyModel', true, []],
-            ['MyPivotModel', true, ['--pivot' => null]],
-            ['MyModel', true, ['--factory' => null]],
-            ['MyModel', true, ['--migration' => null]],
-            ['MyModel', true, ['--seed' => null]],
-            ['MyModel', true, ['--controller' => null]],
-            ['MyModel', true, ['--resource' => null]],
-            ['MyModel', true, ['--api' => null]],
-            ['MyModel', true, ['--all' => null]],
+            ['MyModel', self::MODULE, []],
+            ['MyPivotModel', self::MODULE, ['--pivot' => null]],
+            ['MyFactoryModel', self::MODULE, ['--factory' => null]],
+            ['MyMigrationModel', self::MODULE, ['--migration' => null]],
+            ['MySeedModel', self::MODULE, ['--seed' => null]],
+            ['MyControllerModel', self::MODULE, ['--controller' => null]],
+            ['MyResourceModel', self::MODULE, ['--resource' => null]],
+            ['MyApiModel', self::MODULE, ['--api' => null]],
+            ['MyAllModel', self::MODULE, ['--all' => null]],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $subclass = Model::class;
         if (isset($args['--pivot'])) {
             $subclass = Pivot::class;
@@ -80,8 +83,8 @@ class MakeModelTest extends ATestCase
     {
         if (isset($args['--factory'])) {
             $path = self::SANDBOX;
-            if ($args['--module']) {
-                $path = Config::get('modules.path');
+            if ($args[$this->myModuleKey]) {
+                $path = $this->myModulePath;
             }
             $path .= '/database/factories/' . Str::after($class, 'Models\\') . 'Factory.php';
             $this->assertFileExists($path, 'FACTORY not found');
@@ -96,8 +99,8 @@ class MakeModelTest extends ATestCase
     {
         if (isset($args['--migration'])) {
             $path = $this->app->basePath();
-            if ($args['--module']) {
-                $path = Config::get('modules.path') . '/' . $args['--module'];
+            if ($args[$this->myModuleKey]) {
+                $path = $this->myModulePath . '/' . $args[$this->myModuleKey];
             }
             $path .= '/database/migrations/*_table.php';
             $files = $this->app['files']->glob($path);
@@ -114,8 +117,8 @@ class MakeModelTest extends ATestCase
     {
         if (isset($args['--seed'])) {
             $path = self::SANDBOX;
-            if ($args['--module']) {
-                $path = Config::get('modules.path');
+            if ($args[$this->myModuleKey]) {
+                $path = $this->myModulePath;
             }
             $path .= '/database/seeders/' . Str::after($class, 'Models\\') . 'Seeder.php';
             $this->assertFileExists($path, 'SEEDER not found');
@@ -131,8 +134,8 @@ class MakeModelTest extends ATestCase
     {
         if (isset($args['--controller']) || isset($args['--resource']) || isset($args['--api'])) {
             $path = self::APP_PATH;
-            if ($args['--module']) {
-                $path = Config::get('modules.path');
+            if ($args[$this->myModuleKey]) {
+                $path = $this->myModulePath;
             }
             $path .= '/Http/Controllers/' . Str::after($class, 'Models\\') . 'Controller.php';
             $this->assertFileExists($path, 'CONTROLLER not found');

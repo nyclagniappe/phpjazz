@@ -18,8 +18,8 @@ class MakeProviderTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyProvider', false, null],
-            ['MyProvider', true, null],
+            ['MyProvider', null, null],
+            ['MyProvider', self::MODULE, null],
         ];
     }
 }

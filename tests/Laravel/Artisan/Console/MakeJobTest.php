@@ -20,24 +20,26 @@ class MakeJobTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyJob', false, ['--sync' => false]],
-            ['MySyncJob', false, ['--sync' => true]],
+            ['MyJob', null, ['--sync' => false]],
+            ['MySyncJob', null, ['--sync' => true]],
 
-            ['MyJob', true, ['--sync' => false]],
-            ['MySyncJob', true, ['--sync' => true]],
+            ['MyJob', self::MODULE, ['--sync' => false]],
+            ['MySyncJob', self::MODULE, ['--sync' => true]],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $implements = is_subclass_of($class, ShouldQueue::class);
         $this->assertTrue($args['--sync'] ? $implements : !$implements);
-
-        $this->assertIsArray($args);
     }
 }

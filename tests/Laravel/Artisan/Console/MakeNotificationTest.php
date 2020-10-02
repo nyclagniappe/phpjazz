@@ -19,21 +19,25 @@ class MakeNotificationTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyNotification', false, null],
-            ['MyMarkdownNotification', false, ['--markdown' => 'notification']],
+            ['MyNotification', null, null],
+            ['MyMarkdownNotification', null, ['--markdown' => 'notification']],
 
-            ['MyNotification', true, null],
-            ['MyMarkdownNotification', true, ['--markdown' => 'notification']],
+            ['MyNotification', self::MODULE, null],
+            ['MyMarkdownNotification', self::MODULE, ['--markdown' => 'notification']],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $this->assertTrue(is_subclass_of($class, Notification::class));
         $this->assertIsArray($args);
 
@@ -41,8 +45,8 @@ class MakeNotificationTest extends ATestCase
             $file = '/resources/views/' . $args['--markdown'] . '.blade.php';
             $path = self::SANDBOX . $file;
 
-            if ($args['--module']) {
-                $path = dirname($this->getMyPath($args['name'], $args['--module']), 2) . $file;
+            if (isset($args[$this->myModuleKey])) {
+                $path = dirname($this->getMyPath($args['name'], $args[$this->myModuleKey]), 2) . $file;
             }
             $this->assertFileExists($path);
         }

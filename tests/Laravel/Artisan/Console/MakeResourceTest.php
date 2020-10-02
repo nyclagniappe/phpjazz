@@ -20,27 +20,27 @@ class MakeResourceTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyResource', false, null],
-            ['MyCollectionResource', false, ['--collection' => 'MyCollection']],
-            ['MyResourceCollection', false, null],
+            ['MyResource', null, null],
+            ['MyResourceCollection', null, ['--collection' => 'MyCollection']],
 
-            ['MyResource', true, null],
-            ['MyCollectionResource', true, ['--collection' => 'MyCollection']],
-            ['MyResourceCollection', true, null],
+            ['MyResource', self::MODULE, null],
+            ['MyResourceCollection', self::MODULE, ['--collection' => 'MyCollection']],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $isSubClass = is_subclass_of($class, ResourceCollection::class);
         $isCollection = Str::endsWith($class, 'Collection') || array_key_exists('--collection', $args);
         $this->assertTrue($isCollection ? $isSubClass : !$isSubClass);
-
-        $this->assertIsArray($args);
     }
 }

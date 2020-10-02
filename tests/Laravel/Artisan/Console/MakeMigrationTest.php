@@ -36,21 +36,23 @@ class MakeMigrationTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyMigration', false, []],
-            ['MyMigration', true, ['--path' => 'not/applicable']],
+            ['MyMigration', null, []],
+            ['MyMigration', self::MODULE, ['--path' => 'not/applicable']],
         ];
     }
 
 
     // ASSERTION METHODS
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
-        parent::assertions($class, $args);
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $this->assertMethodInClass($class, 'up', true);
         $this->assertMethodInClass($class, 'down', true);
     }
@@ -68,7 +70,7 @@ class MakeMigrationTest extends ATestCase
         $className = null;
         $path = $this->app->basePath() . '/';
         if ($module) {
-            $path .= 'app/' . $this->myModulePath . '/' . $module . '/resources/';
+            $path .= $this->myModulePath . '/' . $module . '/resources/';
         }
         $path .= 'database/migrations/*_my_migration.php';
 

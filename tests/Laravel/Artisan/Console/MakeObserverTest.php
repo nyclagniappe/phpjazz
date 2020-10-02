@@ -19,28 +19,30 @@ class MakeObserverTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyObserver', false, ['--model' => null]],
-            ['MyModelObserver', false, ['--model' => 'MyFakeModel']],
+            ['MyObserver', null, ['--model' => null]],
+            ['MyModelObserver', null, ['--model' => 'MyFakeModel']],
 
-            ['MyObserver', true, ['--model' => null]],
-            ['MyModelObserver', true, ['--model' => 'MyFakeModel']],
+            ['MyObserver', self::MODULE, ['--model' => null]],
+            ['MyModelObserver', self::MODULE, ['--model' => 'MyFakeModel']],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        $args = $this->myArgs;
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $hasModel = $args['--model'] !== null;
         $this->assertMethodInClass($class, 'created', $hasModel);
         $this->assertMethodInClass($class, 'updated', $hasModel);
         $this->assertMethodInClass($class, 'deleted', $hasModel);
         $this->assertMethodInClass($class, 'restored', $hasModel);
         $this->assertMethodInClass($class, 'forceDeleted', $hasModel);
-
-        $this->assertIsArray($args);
     }
 }

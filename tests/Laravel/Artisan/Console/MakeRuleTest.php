@@ -19,19 +19,21 @@ class MakeRuleTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyRule', false, null],
-            ['MyRule', true, null],
+            ['MyRule', null, null],
+            ['MyRule', self::MODULE, null],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $this->assertTrue(is_subclass_of($class, Rule::class));
-        $this->assertIsArray($args);
     }
 }

@@ -19,19 +19,21 @@ class MakeRequestTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyRequest', false, null],
-            ['MyRequest', true, null],
+            ['MyRequest', null, null],
+            ['MyRequest', self::MODULE, null],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $this->assertTrue(is_subclass_of($class, FormRequest::class));
-        $this->assertIsArray($args);
     }
 }

@@ -19,22 +19,24 @@ class MakeTestTest extends ATestCase
     public function provider(): array
     {
         return [
-            ['MyTest', false, null],
-            ['MyTest', false, ['--unit' => null]],
+            ['MyTest', null, null],
+            ['MyTest', null, ['--unit' => null]],
 
-            ['MyTest', true, null],
-            ['MyTest', true, ['--unit' => null]],
+            ['MyTest', self::MODULE, null],
+            ['MyTest', self::MODULE, ['--unit' => null]],
         ];
     }
 
     /**
-     * Additional Assertions
-     * @param string $class
-     * @param array $args
+     * Assertions
+     * @param string $name
+     * @param ?string $module
      */
-    protected function assertions(string $class, array $args): void
+    protected function assertions(string $name, ?string $module): void
     {
-        parent::assertions($class, $args);
+        parent::assertions($name, $module);
+
+        $class = $this->getMyClass($name, $module);
         $this->assertTrue(
             is_subclass_of($class, TestCase::class, true),
             'Does not extend ' . TestCase::class
@@ -53,7 +55,7 @@ class MakeTestTest extends ATestCase
 
         $ret = self::SANDBOX . '/tests';
         if ($module !== null) {
-            $ret = self::APP_PATH . '/' . $this->myModulePath . '/' . $module . '/' . $component;
+            $ret = self::SANDBOX . '/' . $this->myModulePath . '/' . $module . '/' . $component;
         }
         $ret .= (array_key_exists('--unit', $this->myArgs)) ? '/Unit' : '/Feature';
         $ret .= '/' . $className . '.php';
@@ -71,9 +73,9 @@ class MakeTestTest extends ATestCase
     {
         $component = str_replace('.', '\\', $this->myComponent);
 
-        $ret = $this->myDefaultNamespace . '\\';
+        $ret = self::APP_NAMESPACE;
         if ($module !== null) {
-            $ret = $this->myModuleNamespace . '\\' . $module . '\\';
+            $ret = $this->myModuleNamespace . $module . '\\';
         }
         $ret .= $component . '\\';
         $ret .= (array_key_exists('--unit', $this->myArgs)) ? 'Unit\\' : 'Feature\\';

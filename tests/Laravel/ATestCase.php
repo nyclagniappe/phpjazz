@@ -16,14 +16,27 @@ use Illuminate\Contracts\{
     Debug\ExceptionHandler as ContractExceptionHandler
 };
 use Illuminate\Events\Dispatcher;
-
-require_once __DIR__ . '/sandbox/tests/CreatesApplication.php';
-require_once __DIR__ . '/sandbox/tests/TestCase.php';
+use Illuminate\Support\Str;
+use Illuminate\Testing\PendingCommand;
 
 abstract class ATestCase extends LaravelTestCase
 {
     protected const SANDBOX = __DIR__ . '/sandbox';
     protected const APP_PATH = self::SANDBOX . '/app';
+    protected const APP_NAMESPACE = 'App\\';
+
+    protected bool $sandboxCleanOnSetUp = true;
+    protected bool $sandboxCleanOnTearDown = false;
+    protected array $sandboxPaths = [
+        'bootstrap/cache',
+        'app',
+        'database/factories',
+        'database/migrations',
+        'database/seeders',
+        'resources/views',
+        'tests/Feature',
+        'tests/Unit',
+    ];
 
     /**
      * Set Up
@@ -34,36 +47,28 @@ abstract class ATestCase extends LaravelTestCase
     {
         parent::setUp();
 
-        $deleteDir = static function (string $path) use (&$deleteDir) {
-            if (!is_dir($path)) {
-                return;
+        if ($this->sandboxCleanOnSetUp) {
+            foreach ($this->sandboxPaths as $path) {
+                $this->sandboxClean($path);
             }
-
-            $dir = new DirectoryIterator($path);
-            foreach ($dir as $file) {
-                if ($file->isDot() || $file->getFilename() === '.gitignore') {
-                    continue;
-                }
-
-                if ($file->isDir()) {
-                    $deleteDir($file->getRealPath());
-                    rmdir($file->getRealPath());
-                } else {
-                    unlink($dir->getRealPath());
-                }
-            }
-        };
-
-        $deleteDir(self::SANDBOX . '/bootstrap/cache');
-        $deleteDir(self::SANDBOX . '/app');
-        $deleteDir(self::SANDBOX . '/database/factories');
-        $deleteDir(self::SANDBOX . '/database/migrations');
-        $deleteDir(self::SANDBOX . '/database/seeders');
-        $deleteDir(self::SANDBOX . '/resources/views');
-        $deleteDir(self::SANDBOX . '/stubs');
-        $deleteDir(self::SANDBOX . '/tests/Feature');
-        $deleteDir(self::SANDBOX . '/tests/Unit');
+        }
+        $this->sandboxClean('stubs');
     }
+
+    /**
+     * Tear Down
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        if ($this->sandboxCleanOnTearDown) {
+            foreach ($this->sandboxPaths as $path) {
+                $this->sandboxClean($path);
+            }
+        }
+    }
+
 
     /**
      * Creates the Laravel Application
@@ -77,8 +82,8 @@ abstract class ATestCase extends LaravelTestCase
         $app->singleton(
             ContractKernel::class,
             function () use ($app, $events) {
-                return new class ($app, $events) extends LaravelKernel {
-                    protected $commands = [SampleCommand::class];
+                return new class ($app, $events) extends LaravelKernel
+                {
                 };
             }
         );
@@ -90,5 +95,48 @@ abstract class ATestCase extends LaravelTestCase
 
         $app->make(ContractKernel::class)->bootstrap();
         return $app;
+    }
+
+    /**
+     * Create an Artisan Command
+     * @param string $command
+     * @param array $args
+     * @return PendingCommand
+     */
+    protected function createArtisan(string $command, array $args = []): PendingCommand
+    {
+        return $this->artisan($command, $args)
+            ->assertExitCode(0);
+    }
+
+
+
+    /**
+     * Clean Sandbox
+     * @param string $path
+     */
+    private function sandboxClean(string $path): void
+    {
+        if (!Str::contains($path, self::SANDBOX)) {
+            $path = self::SANDBOX . '/' . $path;
+        }
+
+        if (!is_dir($path)) {
+            return;
+        }
+
+        $dir = new DirectoryIterator($path);
+        foreach ($dir as $file) {
+            if ($file->isDot() || $file->getFilename() === '.gitignore') {
+                continue;
+            }
+
+            if ($file->isDir()) {
+                $this->sandboxClean($file->getRealPath());
+                rmdir($file->getRealPath());
+            } else {
+                unlink($dir->getRealPath());
+            }
+        }
     }
 }
