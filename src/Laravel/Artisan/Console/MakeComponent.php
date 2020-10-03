@@ -5,21 +5,14 @@ declare(strict_types=1);
 namespace Jazz\Laravel\Artisan\Console;
 
 use Illuminate\Foundation\Console\ComponentMakeCommand;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Inspiring;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeComponent extends ComponentMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
+    use TModuleGenerator {
+        buildClass as myBuildClass;
+    }
 
     /**
      * Returns stub file for generator
@@ -31,18 +24,16 @@ class MakeComponent extends ComponentMakeCommand
     }
 
     /**
-     * Build the class with the given name
+     * Build the class with given name
      * @param string $name
      * @return string
      */
     protected function buildClass($name): string
     {
-        $name = parent::buildClass($name);
+        $stub = $this->myBuildClass($name);
+
         $replace = 'view(\'components.' . $this->getView() . '\')';
-        if ($this->option('inline')) {
-            $replace = "<<<'blade'\n<div>\n    <!-- " . Inspiring::quote() . " -->\n</div>\nblade";
-        }
-        return str_replace(['DummyView', '{{view}}', '{{ view }}'], $replace, $name);
+        return $this->replaceView($stub, $replace, $this->option('inline'));
     }
 
     /**
@@ -52,13 +43,6 @@ class MakeComponent extends ComponentMakeCommand
     {
         $file = str_replace('.', '/', 'components.' . $this->getView()) . '.blade.php';
         $path = $this->viewPath($file);
-
-        $module = $this->option(Config::get('modules.key'));
-        if ($module) {
-            $path = $this->laravel->basePath() . '/'
-                . Config::get('modules.path') . '/'
-                . $module . '/resources/views/' . $file;
-        }
 
         if (!$this->files->isDirectory(dirname($path))) {
             $this->files->makeDirectory(dirname($path), 0777, true, true);

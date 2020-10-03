@@ -7,66 +7,37 @@ namespace Jazz\Laravel\Artisan\Console;
 use Illuminate\Routing\Console\ControllerMakeCommand;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
-    TModuleQualifyModel,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeController extends ControllerMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
-    use TModuleQualifyModel;
-
-    /**
-     * Build the replacements for a parent controller
-     * @return array
-     */
-    protected function buildParentReplacements(): array
-    {
-        $parentModelClass = $this->confirmModel($this->option('parent'));
-
-        return [
-            'ParentDummyFullModelClass' => $parentModelClass,
-            '{{ namespacedParentModel }}' => $parentModelClass,
-            '{{namespacedParentModel}}' => $parentModelClass,
-            'ParentDummyModelClass' => class_basename($parentModelClass),
-            '{{ parentModel }}' => class_basename($parentModelClass),
-            '{{parentModel}}' => class_basename($parentModelClass),
-            'ParentDummyModelVariable' => lcfirst(class_basename($parentModelClass)),
-            '{{ parentModelVariable }}' => lcfirst(class_basename($parentModelClass)),
-            '{{parentModelVariable}}' => lcfirst(class_basename($parentModelClass)),
-        ];
+    use TModuleGenerator {
+        buildClass as myBuildClass;
     }
 
     /**
-     * Build the model replacement values
-     * @param array $replace
-     * @return array
+     * Build the class with given name
+     * @param string $name
+     * @return string
      */
-    protected function buildModelReplacements(array $replace): array
+    protected function buildClass($name): string
     {
-        $modelClass = $this->confirmModel($this->option('model'));
+        $stub = $this->myBuildClass($name);
 
-        return array_merge($replace, [
-            'DummyFullModelClass' => $modelClass,
-            '{{ namespacedModel }}' => $modelClass,
-            '{{namespacedModel}}' => $modelClass,
-            'DummyModelClass' => class_basename($modelClass),
-            '{{ model }}' => class_basename($modelClass),
-            '{{model}}' => class_basename($modelClass),
-            'DummyModelVariable' => lcfirst(class_basename($modelClass)),
-            '{{ modelVariable }}' => lcfirst(class_basename($modelClass)),
-            '{{modelVariable}}' => lcfirst(class_basename($modelClass)),
-        ]);
+        if ($this->option('parent')) {
+            $parent = $this->qualifyModel($this->option('parent'));
+            $stub = $this->replaceParentModels($stub, $this->confirmModel($parent));
+        }
+        if ($this->option('model')) {
+            $model = $this->qualifyModel($this->option('model'));
+            $stub = $this->replaceModels($stub, $this->confirmModel($model));
+        }
+
+        $controllerNamespace = $this->getNamespace($name);
+        $stub = str_replace('use ' . $controllerNamespace . "\Controller;\n", '', $stub);
+
+        return $stub;
     }
-
-
 
     /**
      * Confirms Model Creation
@@ -75,12 +46,10 @@ class MakeController extends ControllerMakeCommand
      */
     protected function confirmModel(string $model): string
     {
-        $modelClass = $this->parseModel($model);
-
-        if (!class_exists($modelClass)) {
+        if (!class_exists($model)) {
             $question = class_basename($model) . ' Model does not exist. Do you want to generate it?';
             if ($this->confirm($question)) {
-                $modelName = str_replace('\\', '/', Str::after($modelClass, 'Models\\'));
+                $modelName = str_replace('\\', '/', Str::after($model, 'Models\\'));
                 $moduleKey = Config::get('modules.key');
 
                 $args = [
@@ -91,7 +60,7 @@ class MakeController extends ControllerMakeCommand
             }
         }
 
-        return $modelClass;
+        return $model;
     }
 
     /**

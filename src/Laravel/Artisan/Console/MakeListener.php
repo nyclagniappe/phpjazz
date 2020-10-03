@@ -4,48 +4,24 @@ declare(strict_types=1);
 
 namespace Jazz\Laravel\Artisan\Console;
 
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Foundation\Console\ListenerMakeCommand;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Str;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeListener extends ListenerMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
+    use TModuleGenerator {
+        buildClass as myBuildClass;
+    }
 
     /**
      * Build the class with the given name
      * @param string $name
      * @return string
-     * @throws FileNotFoundException
      */
     protected function buildClass($name): string
     {
-        $event = $this->option('event');
-
-        if (!Str::startsWith($event, [$this->rootNamespace(), 'Illuminate', '\\',])) {
-            $event = $this->rootNamespace() . 'Events\\' . $event;
-        }
-
-        $name = str_replace(
-            ['DummyEvent', '{{event}}', '{{ event }}'],
-            class_basename($name),
-            GeneratorCommand::buildClass($name)
-        );
-        return str_replace(
-            ['DummyFullEvent', '{{fullEvent}}', '{{ fullEvent }}'],
-            trim($event, '\\'),
-            $name
-        );
+        $stub = $this->myBuildClass($name);
+        return $this->replaceEvent($stub, $this->option('event'));
     }
 
     /**

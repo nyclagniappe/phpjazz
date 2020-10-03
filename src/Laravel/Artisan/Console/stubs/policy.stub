@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace {{ namespace }};
 
-use {{ rootNamespace }} as {{ user }};
-use {{ namespacedModel }} as {{ model }};
 use Illuminate\Auth\Access\HandlesAuthorization;
+use {{ namespacedUserModel }};
+use {{ namespacedModel }};
 
 class {{ class }}
 {

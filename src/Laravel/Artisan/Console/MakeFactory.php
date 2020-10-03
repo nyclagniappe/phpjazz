@@ -7,19 +7,13 @@ namespace Jazz\Laravel\Artisan\Console;
 use Illuminate\Database\Console\Factories\FactoryMakeCommand;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModuleRootNamespace,
-    TModuleStubFile,
-    TModuleQualifyModel,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeFactory extends FactoryMakeCommand
 {
-    use TModuleOptions;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
-    use TModuleQualifyModel;
+    use TModuleGenerator {
+        buildClass as myBuildClass;
+    }
 
     /**
      * Build the Class with given name
@@ -29,49 +23,14 @@ class MakeFactory extends FactoryMakeCommand
      */
     protected function buildClass($name): string
     {
-        $module = $this->option(Config::get('modules.key'));
+        $stub = $this->myBuildClass($name);
 
         $namespaceModel = $this->option('model')
             ? $this->qualifyModel($this->option('model'))
             : $this->qualifyModel($this->guessModelName($name));
 
-        $model = class_basename($namespaceModel);
-
-        $rootNamespace = $this->rootNamespace() . '\\Models\\';
-
-        $namespace = 'Database\\Factories\\';
-        if ($module) {
-            $namespace = $this->rootNamespace() . '\\Database\\Factories\\';
-        }
-        $namespace .= Str::beforeLast(Str::after($namespaceModel, $rootNamespace), $model);
-        $namespace = trim($namespace, '\\');
-
-        $replace = [
-            '{{ factoryNamespace }}' => $namespace,
-            'NamespacedDummyModel' => $namespaceModel,
-            '{{ namespacedModel }}' => $namespaceModel,
-            '{{namespacedModel}}' => $namespaceModel,
-            'DummyModel' => $model,
-            '{{ model }}' => $model,
-            '{{model}}' => $model,
-        ];
-
-        $stub = $this->files->get($this->getStub());
-
-        $ret = $this->replaceNamespace($stub, $name)->replaceClass($stub, $name);
-        $ret = str_replace(array_keys($replace), array_values($replace), $ret);
-
-        return $ret;
-    }
-
-    /**
-     * Parse the class name
-     * @param string $name
-     * @return string
-     */
-    protected function qualifyClass($name): string
-    {
-        return parent::qualifyClass(str_replace(['.', '/'], '\\', $name));
+        $stub = $this->replaceModels($stub, $namespaceModel);
+        return $this->replaceFactoryNamespace($stub, $namespaceModel);
     }
 
     /**

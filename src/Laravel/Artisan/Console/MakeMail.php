@@ -5,21 +5,16 @@ declare(strict_types=1);
 namespace Jazz\Laravel\Artisan\Console;
 
 use Illuminate\Foundation\Console\MailMakeCommand;
-use Illuminate\Console\GeneratorCommand;
 use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
+    TModuleGenerator,
     TModuleMarkdownTemplate,
 };
 
 class MakeMail extends MailMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
+    use TModuleGenerator {
+        buildClass as myBuildClass;
+    }
     use TModuleMarkdownTemplate;
 
     /**
@@ -43,10 +38,10 @@ class MakeMail extends MailMakeCommand
      */
     protected function buildClass($name): string
     {
-        $name = GeneratorCommand::buildClass($name);
+        $stub = $this->myBuildClass($name);
         if ($this->option('markdown')) {
-            $name = str_replace(['DummyView', '{{view}}', '{{ view }}'], $this->option('markdown'), $name);
+            $stub = $this->replaceView($stub, $this->option('markdown'));
         }
-        return $name;
+        return $stub;
     }
 }

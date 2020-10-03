@@ -7,15 +7,11 @@ namespace Jazz\Laravel\Artisan\Console;
 use Illuminate\Database\Console\Seeds\SeederMakeCommand;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModuleStubFile,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeSeeder extends SeederMakeCommand
 {
-    use TModuleOptions;
-    use TModuleStubFile;
+    use TModuleGenerator;
 
     /**
      * Get the root namespace for the class
@@ -59,5 +55,15 @@ class MakeSeeder extends SeederMakeCommand
     protected function getStub(): string
     {
         return $this->getStubFile('seeder.stub');
+    }
+
+    /**
+     * Parse the class name and format according to the root namespace
+     * @param string $name
+     * @return string
+     */
+    protected function qualifyClass($name): string
+    {
+        return $name;
     }
 }

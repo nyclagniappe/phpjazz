@@ -7,19 +7,11 @@ namespace Jazz\Laravel\Artisan\Console;
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Console\Command\Command;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeModel extends ModelMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
+    use TModuleGenerator;
 
     /**
      * Call another console command

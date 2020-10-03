@@ -5,37 +5,26 @@ declare(strict_types=1);
 namespace Jazz\Laravel\Artisan\Console;
 
 use Illuminate\Foundation\Console\ObserverMakeCommand;
-use Illuminate\Support\Str;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
-    TModuleStubModel
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeObserver extends ObserverMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
-    use TModuleStubModel;
+    use TModuleGenerator {
+        buildClass as myBuildClass;
+    }
 
     /**
-     * Replace the model for the given stub
-     * @param string $stub
-     * @param string $model
+     * Build the class with given name
+     * @param string $name
      * @return string
      */
-    protected function replaceModel($stub, $model): string
+    protected function buildClass($name): string
     {
-        $this->replaceStubModel($stub, $model);
-
-        $stub = str_replace(['DocDummyModel', '{{docModel}}', '{{ docModel }}'], Str::snake($model, ' '), $stub);
-        $stub = str_replace(['DummyModel', '{{model}}', '{{ model }}'], $model, $stub);
-        $stub = str_replace(['dummyModel', '{{modelVariable}}', '{{ modelVariable }}'], Str::camel($model), $stub);
-
+        $stub = $this->myBuildClass($name);
+        $model = $this->option('model');
+        if ($model) {
+            $stub = $this->replaceModels($stub, $this->qualifyModel($model));
+        }
         return $stub;
     }
 

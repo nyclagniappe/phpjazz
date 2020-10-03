@@ -8,15 +8,11 @@ use Illuminate\Foundation\Console\TestMakeCommand;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use Jazz\Laravel\Artisan\{
-    TModuleRootNamespace,
-    TModuleStubFile,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeTest extends TestMakeCommand
 {
-    use TModuleRootNamespace;
-    use TModuleStubFile;
+    use TModuleGenerator;
 
     /**
      * Constructor

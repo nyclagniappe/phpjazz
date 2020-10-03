@@ -5,19 +5,11 @@ declare(strict_types=1);
 namespace Jazz\Laravel\Artisan\Console;
 
 use Illuminate\Foundation\Console\JobMakeCommand;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakeJob extends JobMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
+    use TModuleGenerator;
 
     /**
      * Returns stub file for generator

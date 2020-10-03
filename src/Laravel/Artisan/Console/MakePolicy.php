@@ -5,46 +5,26 @@ declare(strict_types=1);
 namespace Jazz\Laravel\Artisan\Console;
 
 use Illuminate\Foundation\Console\PolicyMakeCommand;
-use Illuminate\Support\Str;
-use Jazz\Laravel\Artisan\{
-    TModuleOptions,
-    TModulePath,
-    TModuleRootNamespace,
-    TModuleStubFile,
-    TModuleStubModel,
-};
+use Jazz\Laravel\Artisan\TModuleGenerator;
 
 class MakePolicy extends PolicyMakeCommand
 {
-    use TModuleOptions;
-    use TModulePath;
-    use TModuleRootNamespace;
-    use TModuleStubFile;
-    use TModuleStubModel;
+    use TModuleGenerator {
+        buildClass as myBuildClass;
+    }
 
     /**
-     * Replace the model for the given stub
-     * @param string $stub
-     * @param string $model
+     * Build the class with given name
+     * @param string $name
      * @return string
      */
-    protected function replaceModel($stub, $model): string
+    protected function buildClass($name): string
     {
-        $this->replaceStubModel($stub, $model);
-
-        $dummyUser = class_basename($this->userProviderModel());
-        $dummyModel = Str::camel($model) === 'user' ? 'model' : $model;
-
-        $stub = str_replace(['DocDummyModel', '{{docModel}}', '{{ docModel }}'], Str::snake($dummyModel, ' '), $stub);
-        $stub = str_replace(['DummyModel', '{{model}}', '{{ model }}'], $model, $stub);
-        $stub = str_replace(['dummyModel', '{{modelVariable}}', '{{ modelVariable }}'], Str::camel($dummyModel), $stub);
-        $stub = str_replace(['DummyUser', '{{user}}', '{{ user }}'], $dummyUser, $stub);
-        $stub = str_replace(
-            ['DocDummyPluralModel', '{{docPluralModel}}', '{{ docPluralModel }}'],
-            Str::snake(Str::pluralStudly($dummyModel), ' '),
-            $stub
-        );
-
+        $stub = $this->myBuildClass($name);
+        $model = $this->option('model');
+        if ($model) {
+            $stub = $this->replaceModels($stub, $this->qualifyModel($model));
+        }
         return $stub;
     }
 
