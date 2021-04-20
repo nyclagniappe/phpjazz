@@ -5,8 +5,13 @@
 .project
 .DS_Store
 
+/logs
+
 /vendor
 composer.phar
 
 .env
 .phpunit.result.cache
+.php_cs.cache
+
+local.ini

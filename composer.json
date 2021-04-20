@@ -1,32 +1,32 @@
 {
-    "name": "nyclagniappe/phpjazz",
-    "description": "phpJazz Library",
+    "name": "mluster/jazz",
+    "description": "Jazz Library",
     "type": "library",
     "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Michael Luster",
-            "email": "luster.michael@nyclagniappe.com",
+            "email": "luster.michael@gmail.com",
             "role": "Developer"
         }
     ],
     "support": {
-        "email": "phpjazz@nyclagniappe.org",
-        "issues": "https://github.com/nyclagniappe/jazz/issues",
-        "wiki": "https://github.com/nyclagniappe/jazz/wiki",
-        "source": "https://github.com/nyclagniappe/phpjazz"
+        "email": "luster.michael@gmail.com",
+        "issues": "https://github.com/mluster/jazz/issues",
+        "wiki": "https://github.com/mluster/jazz/wiki",
+        "source": "https://github.com/mluster/phpjazz"
     },
 
     "require": {
-        "php": "~7.4",
+        "php": "~8.0",
         "ext-json": "*"
     },
     "require-dev": {
-        "mockery/mockery": "~1.3",
+        "mockery/mockery": "~1.4",
         "phpunit/phpunit": "~9.0",
         "squizlabs/php_codesniffer": "~3.5",
         "phpmd/phpmd": "~2.8",
-        "phploc/phploc": "~6.0"
+        "phploc/phploc": "~7.0"
     },
 
     "autoload": {
@@ -38,5 +38,35 @@
         "psr-4": {
             "JazzTest\\": "tests"
         }
+    },
+
+    "scripts": {
+        "phpcs": [
+            "./vendor/bin/phpcs -s --report-json=logs/phpcs.json > logs/phpcs.out"
+        ],
+        "phpmd": [
+            "./vendor/bin/phpmd src,tests json phpmd.xml --reportfile logs/phpmd.json"
+        ],
+        "phploc": [
+            "./vendor/bin/phploc --count-tests --log-json logs/phploc.json src tests > logs/phploc.out"
+        ],
+        "phpcpd": [
+            "./vendor/bin/phpcpd --log-pmd logs/phpcpd.xml src tests > logs/phpcpd.out"
+        ],
+        "phpstan": [
+            "./vendor/bin/phpstan analyse -c phpstan.neon --error-format=prettyJson src tests > logs/phpstan.json"
+        ],
+        "phpcsfixer": [
+            "./vendor/bin/php-cs-fixer fix --verbose --format=xml --diff --diff-format=udiff --using-cache=no > logs/phpcsfixer.xml"
+        ],
+
+        "analyze": [
+            "@phpcs",
+            "@phpmd",
+            "@phploc",
+            "@phpcpd",
+            "@phpstan",
+            "@phpcsfixer"
+        ]
     }
 }

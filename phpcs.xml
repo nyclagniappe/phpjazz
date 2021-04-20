@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="PHPStandard">
+<ruleset name="PHPCodeSniffer">
+    <!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset -->
     <description>PHP Coding Standards</description>
 
-    <file>app</file>
+    <file>src</file>
     <file>tests</file>
+
+    <exclude-pattern>tests/*/Sample*</exclude-pattern>
 
     <autoload>vendor/autoload.php</autoload>
 
-    <exclude-pattern>*/build/*</exclude-pattern>
-    <exclude-pattern>*/docs/*</exclude-pattern>
-    <exclude-pattern>*/tests/Mocks/*</exclude-pattern>
-
-
+    <!--
+    <arg value="s" />
+    <arg name="report-full" value="logs/phpcs/full.txt" />
+    <arg name="report-summary" value="logs/phpcs/summary.txt" />
+    <arg name="report-xml" value="logs/phpcs/report.xml" />
+    <arg name="report-source" value="logs/phpcs/source.txt" />
+    <arg name="report-info" value="logs/phpcs/info.txt" />
+    <arg name="report-code" value="logs/phpcs/code.txt" />
+    <arg name="report-checkstyle" value="logs/phpcs/checkstyle.txt" />
+    <arg name="report-csv" value="logs/phpcs/report.csv" />
+    <arg name="report-gitblame" value="logs/phpcs/gitblame.txt" />
+    <arg name="report-json" value="logs/phpcs/report.json" />
+    <arg name="report-junit" value="logs/phpcs/junit.xml" />
+    <arg name="report-diff" value="logs/phpcs/diff.txt" />
+    -->
 
     <rule ref="PSR12" />
     <!-- <rule ref="PSR12">
@@ -27,7 +40,9 @@
     <rule ref="Generic.CodeAnalysis.AssignmentInCondition" />
     <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement" />
     <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier" />
-    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter" />
+    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+        <exclude-pattern>database/factories/*</exclude-pattern>
+    </rule>
     <rule ref="Generic.CodeAnalysis.UselessOverridingMethod" />
     <rule ref="Generic.Commenting.DocComment">
         <exclude name="Generic.Commenting.DocComment.MissingShort" />
@@ -38,7 +53,7 @@
     </rule>
     <rule ref="Generic.Commenting.Fixme" />
     <rule ref="Generic.Commenting.Todo" />
-    <rule ref="Generic.Files.EndFileNewLine" />
+    <rule ref="Generic.Files.EndFileNewline" />
     <rule ref="Generic.Files.OneClassPerFile" />
     <rule ref="Generic.Files.OneInterfacePerFile" />
     <rule ref="Generic.Files.OneObjectStructurePerFile" />
@@ -53,7 +68,7 @@
     <rule ref="Generic.PHP.ForbiddenFunctions" />
     <rule ref="Generic.PHP.NoSilencedErrors" />
     <rule ref="Generic.PHP.SAPIUsage" />
-
+    <rule ref="Generic.PHP.Syntax" />
 
     <rule ref="Squiz.Classes.ClassFileName" />
     <rule ref="Squiz.Classes.SelfMemberReference" />
