@@ -19,7 +19,8 @@
 
     "require": {
         "php": "~8.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "laravel/framework": "^8.0"
     },
     "require-dev": {
         "mockery/mockery": "~1.4",
