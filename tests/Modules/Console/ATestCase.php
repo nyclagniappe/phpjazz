@@ -18,7 +18,6 @@ abstract class ATestCase extends BaseTestCase
     protected $myModuleNamespace = 'App\\Modules\\';
     protected $myModulePath = 'app/Modules';
     protected $myModuleName = 'Module';
-    protected $myModules = ['Sandbox'];
 
     protected $myArgs = [];
 
@@ -34,7 +33,6 @@ abstract class ATestCase extends BaseTestCase
         $this->myModuleNamespace = Config::get('modules.namespace');
         $this->myModulePath = Config::get('modules.path');
         $this->myModuleName = Config::get('modules.name');
-        $this->myModules = Config::get('modules.list');
     }
 
 

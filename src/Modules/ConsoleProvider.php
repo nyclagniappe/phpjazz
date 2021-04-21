@@ -6,35 +6,35 @@ namespace Jazz\Modules;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
+use Jazz\Modules\Console\ConsoleMake;
 
 class ConsoleProvider extends ServiceProvider implements DeferrableProvider
 {
-    // List of existing Artisan Commands to override
     protected array $commands = [
-    ];
-
-    // List of NEW Commands
-    protected array $newCommands = [
+        'ConsoleMake' => 'command.console.make',
     ];
 
 
     public function register(): void
     {
-        $list = array_merge($this->commands, $this->newCommands);
-        foreach (array_keys($list) as $command) {
+        foreach (array_keys($this->commands) as $command) {
             $method = 'register' . $command;
             call_user_func([$this, $method]);
         }
-
-        $this->commands(array_values($list));
+        $this->commands(array_values($this->commands));
     }
 
     public function provides(): array
     {
-        return array_values($this->newCommands);
+        return array_values($this->commands);
     }
 
 
     // Register Methods
-
+    protected function registerConsoleMake()
+    {
+        $this->app->singleton('command.console.make', static function ($app) {
+            return new ConsoleMake($app['files']);
+        });
+    }
 }

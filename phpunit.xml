@@ -8,6 +8,9 @@
         <testsuite name="All">
             <directory>./tests</directory>
         </testsuite>
+        <testsuite name="Modules">
+            <directory>./tests/Modules</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">
