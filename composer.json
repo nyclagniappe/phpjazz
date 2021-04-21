@@ -1,8 +1,9 @@
 {
     "name": "mluster/jazz",
     "description": "Jazz Library",
+    "keywords": ["php", "library", "laravel"],
     "type": "library",
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "authors": [
         {
             "name": "Michael Luster",
@@ -11,7 +12,6 @@
         }
     ],
     "support": {
-        "email": "luster.michael@gmail.com",
         "issues": "https://github.com/mluster/jazz/issues",
         "wiki": "https://github.com/mluster/jazz/wiki",
         "source": "https://github.com/mluster/phpjazz"
@@ -38,6 +38,22 @@
     "autoload-dev": {
         "psr-4": {
             "JazzTest\\": "tests"
+        }
+    },
+
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jazz\\Modules\\Provider",
+                "Jazz\\Modules\\ConsoleProvider"
+            ]
         }
     },
 

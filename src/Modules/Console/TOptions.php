@@ -2,17 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Jazz\Modules;
+namespace Jazz\Modules\Console;
 
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Console\Input\InputOption;
 
 trait TOptions
 {
-    /**
-     * Get the console command options
-     * @return array
-     */
     protected function getOptions(): array
     {
         $key = Config::get('modules.key');

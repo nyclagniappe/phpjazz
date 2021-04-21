@@ -29,6 +29,7 @@ abstract class ATestCase extends LaravelTestCase
         'database/factories',
         'database/migrations',
         'database/seeders',
+        'modules',
         'resources/views',
         'tests/Feature',
         'tests/Unit',
