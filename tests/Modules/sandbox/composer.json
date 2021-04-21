@@ -1,0 +1,17 @@
+{
+    "name": "mluster/jazz",
+    "description": "Jazz Sandbox",
+    "type": "library",
+    "license": "BSD-3-Clause",
+
+    "autoload": {
+        "psr-4": {
+            "App": "app"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}
