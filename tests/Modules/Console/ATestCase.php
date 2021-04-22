@@ -11,15 +11,15 @@ abstract class ATestCase extends BaseTestCase
 {
     protected const MODULE = 'Sandbox';
 
-    protected $myCommand;
-    protected $myComponent;
+    protected string $myCommand;
+    protected string $myComponent;
 
-    protected $myModuleKey = '--module';
-    protected $myModuleNamespace = 'App\\Modules\\';
-    protected $myModulePath = 'app/Modules';
-    protected $myModuleName = 'Module';
+    protected string $myModuleKey = '--module';
+    protected string $myModuleNamespace = 'App\\Modules\\';
+    protected string $myModulePath = 'app/Modules';
+    protected string $myModuleName = 'Module';
 
-    protected $myArgs = [];
+    protected array $myArgs = [];
 
 
     /**

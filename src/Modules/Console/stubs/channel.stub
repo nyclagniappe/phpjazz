@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ namespacedUserModel }} as {{ user }};
+
+class {{ class }}
+{
+
+    public function __construct()
+    {
+    }
+
+    public function join({{ user }} $user)
+    {
+    }
+}

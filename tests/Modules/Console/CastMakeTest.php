@@ -6,8 +6,8 @@ namespace JazzTest\Modules\Console;
 
 class CastMakeTest extends ATestCase
 {
-    protected $myCommand = 'make:cast';
-    protected $myComponent = 'Casts';
+    protected string $myCommand = 'make:cast';
+    protected string $myComponent = 'Casts';
 
     public function provider(): array
     {

@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class {{ class }} extends Exception
+{
+    public function report(): void
+    {
+    }
+
+    public function render(Request $request): Response
+    {
+    }
+}

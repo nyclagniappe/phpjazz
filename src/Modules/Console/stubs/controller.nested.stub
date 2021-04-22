@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use {{ namespacedModel }} as {{ model }};
+use {{ namespacedParentModel }} as {{ parentModel }};
+
+class {{ class }} extends Controller
+{
+    public function index({{ parentModel }} ${{ parentModelVariable }}): Response
+    {
+        return response()->view('index', ['method' => __METHOD__]);
+    }
+
+    public function create({{ parentModel }} ${{ parentModelVariable }}): Response
+    {
+        return response()->view('create', ['method' => __METHOD__]);
+    }
+
+    public function store(Request $request, {{ parentModel }} ${{ parentModelVariable }}): Response
+    {
+        return redirect()->route('index');
+    }
+
+    public function show(
+        {{ parentModel }} ${{ parentModelVariable }},
+        {{ model }} ${{ modelVariable }}
+    ): Response {
+        return response()->view('show', ['method' => __METHOD__]);
+    }
+
+    public function edit(
+        {{ parentModel }} ${{ parentModelVariable }},
+        {{ model }} ${{ modelVariable }}
+    ): Response {
+        return response()->view('edit', ['method' => __METHOD__]);
+    }
+
+    public function update(
+        Request $request,
+        {{ parentModel }} ${{ parentModelVariable }},
+        {{ model }} ${{ modelVariable }}
+    ): Response {
+        return redirect()->route('index');
+    }
+
+    public function destroy(
+        {{ parentModel }} ${{ parentModelVariable }},
+        {{ model }} ${{ modelVariable }}
+    ): Response {
+        return redirect()->route('index');
+    }
+}

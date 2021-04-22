@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace JazzTest\Modules\Console;
 
-use Illuminate\Console\Command;
+use Illuminate\Contracts\Validation\Rule;
 
-class ConsoleMakeTest extends ATestCase
+class RuleMakeTest extends ATestCase
 {
-    protected string $myCommand = 'make:command';
-    protected string $myComponent = 'Console.Commands';
-
+    protected string $myCommand = 'make:rule';
+    protected string $myComponent = 'Rules';
 
     public function provider(): array
     {
         return [
-            ['MyCommand', null, null],
-            ['MyCommand', self::MODULE, null],
+            ['MyRule', null, null],
+            ['MyRule', self::MODULE, null],
         ];
     }
 
@@ -25,6 +24,6 @@ class ConsoleMakeTest extends ATestCase
         parent::assertions($name, $module);
 
         $class = $this->getMyClass($name, $module);
-        $this->assertTrue(is_subclass_of($class, Command::class));
+        $this->assertTrue(is_subclass_of($class, Rule::class));
     }
 }

@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class {{ class }} extends Mailable
+{
+    use Queueable;
+    use SerializesModels;
+
+    public function __construct()
+    {
+    }
+
+    public function build(): {{ class }}
+    {
+        return $this->view('view.name');
+    }
+}
