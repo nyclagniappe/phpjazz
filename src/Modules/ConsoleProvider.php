@@ -28,6 +28,8 @@ use Jazz\Modules\Console\RuleMake;
 use Jazz\Modules\Console\TestMake;
 use Jazz\Modules\Database\Migration;
 use Jazz\Modules\Console\MigrationMake;
+use Jazz\Modules\Console\FactoryMake;
+use Jazz\Modules\Console\SeederMake;
 
 class ConsoleProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -54,6 +56,8 @@ class ConsoleProvider extends ServiceProvider implements DeferrableProvider
         'TestMake' => 'command.test.make',
 
         'MigrationMake' => 'command.migrate.make',
+        'FactoryMake' => 'command.factory.make',
+        'SeederMake' => 'command.seeder.make',
     ];
 
 
@@ -224,6 +228,20 @@ class ConsoleProvider extends ServiceProvider implements DeferrableProvider
             $creator = $app['migration.creator'];
             $composer = $app['composer'];
             return new MigrationMake($creator, $composer);
+        });
+    }
+
+    protected function registerFactoryMake(): void
+    {
+        $this->app->singleton('command.factory.make', static function ($app) {
+            return new FactoryMake($app['files']);
+        });
+    }
+
+    protected function registerSeederMake(): void
+    {
+        $this->app->singleton('command.seeder.make', static function ($app) {
+            return new SeederMake($app['files']);
         });
     }
 }
