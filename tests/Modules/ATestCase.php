@@ -21,7 +21,7 @@ abstract class ATestCase extends LaravelTestCase
     protected const APP_PATH = self::SANDBOX . '/app';
     protected const APP_NAMESPACE = 'App\\';
 
-    protected bool $sandboxCleanOnSetUp = false;
+    protected bool $sandboxCleanOnSetUp = true;
     protected bool $sandboxCleanOnTearDown = false;
     protected array $sandboxPaths = [
         'bootstrap/cache',
@@ -31,6 +31,7 @@ abstract class ATestCase extends LaravelTestCase
         'database/seeders',
         'modules',
         'resources/views',
+        'stubs',
         'tests/Feature',
         'tests/Unit',
     ];

@@ -31,6 +31,9 @@ use Jazz\Modules\Console\MigrationMake;
 use Jazz\Modules\Console\FactoryMake;
 use Jazz\Modules\Console\SeederMake;
 use Jazz\Modules\Console\Seed;
+use Jazz\Modules\Console\StubPublish;
+use Illuminate\Database\Eloquent\Factories\Factory as LaravelFactory;
+use Jazz\Modules\Database\Factory;
 
 class ConsoleProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -61,6 +64,7 @@ class ConsoleProvider extends ServiceProvider implements DeferrableProvider
         'SeederMake' => 'command.seeder.make',
 
         'Seed' => 'command.seed',
+        'StubPublish' => 'command.stub.publish',
     ];
 
 
@@ -71,6 +75,13 @@ class ConsoleProvider extends ServiceProvider implements DeferrableProvider
             call_user_func([$this, $method]);
         }
         $this->commands(array_values($this->commands));
+
+        LaravelFactory::guessFactoryNamesUsing(function (string $model) {
+            return Factory::resolveFactory($model);
+        });
+        LaravelFactory::guessModelNamesUsing(function (LaravelFactory $factory) {
+            return Factory::resolveModel($factory);
+        });
     }
 
     public function provides(): array
@@ -252,6 +263,14 @@ class ConsoleProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton('command.seed', function ($app) {
             return new Seed($app['db']);
+        });
+    }
+
+
+    protected function registerStubPublish(): void
+    {
+        $this->app->singleton('command.stub.publish', function () {
+            return new StubPublish();
         });
     }
 }
