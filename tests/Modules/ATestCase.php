@@ -22,7 +22,7 @@ abstract class ATestCase extends LaravelTestCase
     protected const APP_NAMESPACE = 'App\\';
 
     protected bool $sandboxCleanOnSetUp = true;
-    protected bool $sandboxCleanOnTearDown = false;
+    protected bool $sandboxCleanOnTearDown = true;
     protected array $sandboxPaths = [
         'bootstrap/cache',
         'app',
