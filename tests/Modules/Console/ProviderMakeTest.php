@@ -14,6 +14,9 @@ class ProviderMakeTest extends ATestCase
         return [
             ['MyProvider', null, null],
             ['MyProvider', self::MODULE, null],
+
+            ['MyEventProvider', null, ['--event' => true]],
+            ['MyEventProvider', self::MODULE, ['--event' => true]],
         ];
     }
 }
